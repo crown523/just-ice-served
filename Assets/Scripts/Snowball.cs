@@ -33,5 +33,6 @@ public class Snowball : MonoBehaviour
     {
         Destroy(other.GetComponent<Collider2D>().gameObject);
         Destroy(gameObject);
+        ScoreScript.score++;
     }
 }
