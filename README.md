@@ -1,2 +1,2 @@
 # just-ice-served
-Just ice Served, a game made for the 2020 2-buttons game jam.
+The adventure of a snowball-wielding vigilante. A game made for the 2020 2-buttons game jam.
