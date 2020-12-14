@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         player = GetComponent<Transform>();
-        player.position = new Vector3(-5.0f, 4.0f, 0.0f);
+        player.position = new Vector3(-5.0f, 0, 0.0f);
         lane = "top";
 
         moving = false;
@@ -32,9 +32,16 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //print(player.position.y);
 
-        if (Input.GetKey("down") && !moving) 
+        // should constantly run to the right, camera moves with
+
+        player.Translate(2 * Vector3.right * Time.deltaTime);
+        Camera.main.transform.Translate(2 * Vector3.right * Time.deltaTime);
+        
+
+        // handle lane changing
+
+        if (Input.GetKey("space") && !moving) 
         {
 
             moving = true;
@@ -112,7 +119,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //throw a snowball
-        if(Input.GetKey("space") && Time.time > nextThrow)
+        if(Input.GetKey("z") && Time.time > nextThrow)
         {
             nextThrow = Time.time + throwDelay;
             Instantiate(snowball, throwLocation.position, throwLocation.rotation);
