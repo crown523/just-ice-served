@@ -82,7 +82,13 @@ public class CopAI : MonoBehaviour
     void changeLane()
     {
         print("change method called");
-        if (!moving) {
+
+        bool tooClose = (cop.position.x <= player.transform.position.x + 2);
+
+
+        // dont change lane if already moving
+        // AND dont change lane if too close to the player (could be undodgeable)
+        if (!moving && !tooClose) {
             print("SWITCHING LANE");
             switch (Random.Range(1, 4))
             {
