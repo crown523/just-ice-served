@@ -129,6 +129,7 @@ public class PlayerController : MonoBehaviour
         {
             print("ded");
             //Application.Quit();
+            ScoreScript.score = 0; // score needs to reset on death
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
