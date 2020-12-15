@@ -31,8 +31,18 @@ public class Snowball : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Destroy(other.GetComponent<Collider2D>().gameObject);
-        Destroy(gameObject);
-        ScoreScript.score++;
+        if(other.GetComponent<EnemyAI>() != null)
+        {
+            //Destroy(other.GetComponent<Collider2D>().gameObject);
+            Destroy(other.gameObject);
+            Destroy(gameObject);
+            ScoreScript.score++;
+        }
+        else if(other.GetComponent<CopAI>() != null)
+        {
+            Destroy(gameObject);
+            ScoreScript.score--;
+        }
+        
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -33,12 +34,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-        // should constantly run to the right, camera moves with
-
-        player.Translate(2 * Vector3.right * Time.deltaTime);
-        Camera.main.transform.Translate(2 * Vector3.right * Time.deltaTime);
-        
-
         // handle lane changing
 
         if (Input.GetKey("space") && !moving) 
@@ -61,11 +56,11 @@ public class PlayerController : MonoBehaviour
                     //print(Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) > 0.05f);
                     if (Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) > 0.05f)
                     {
-                        player.Translate(3f * direction * Time.deltaTime);
+                        player.Translate(6f * direction * Time.deltaTime);
                     }
                     else
                     {
-                        print(player.position.y);
+                        
                         moving = false;
                         lane = "mid";
                     }
@@ -76,15 +71,15 @@ public class PlayerController : MonoBehaviour
 
                     if (Vector3.Distance(player.position, new Vector3(player.position.x, 4.0f, 0.0f)) > 0.05f && (direction == Vector3.up))
                     {
-                        player.Translate(3f * direction * Time.deltaTime);
+                        player.Translate(6f * direction * Time.deltaTime);
                     }
                     else if(Vector3.Distance(player.position, new Vector3(player.position.x, -4.0f, 0.0f)) > 0.05f && (direction == Vector3.down))
                     {
-                        player.Translate(3f * direction * Time.deltaTime);
+                        player.Translate(6f * direction * Time.deltaTime);
                     }
                     else
                     {
-                        print(player.position.y);
+                        
                         moving = false;
                         if(Vector3.Distance(player.position, new Vector3(player.position.x, 4.0f, 0.0f)) > Vector3.Distance(player.position, new Vector3(player.position.x, -4.0f, 0.0f)))
                         {
@@ -104,11 +99,11 @@ public class PlayerController : MonoBehaviour
                     direction = Vector3.up;
                     if (Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) > 0.05f)
                     {
-                        player.Translate(3f * direction * Time.deltaTime);
+                        player.Translate(6f * direction * Time.deltaTime);
                     }
                     else
                     {
-                        print(player.position.y);
+                        
                         moving = false;
                         lane = "mid";
                     }
@@ -126,4 +121,16 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.GetComponent<CopAI>() != null)
+        {
+            print("ded");
+            //Application.Quit();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
+
 }
