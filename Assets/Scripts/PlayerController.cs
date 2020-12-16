@@ -6,13 +6,14 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     //variables for movement
-    string lane;
+    private string lane;
     private bool moving;
     private Transform player;
     private Vector3 direction;
+    public float switchSpeed = 6f;
 
-    //variable 
-    private float throwDelay = 1.0f;
+    //variables for snowball tossing
+    public float throwDelay = 1.0f;
     private float nextThrow = 0.0f;
     public Transform throwLocation;
     public GameObject snowball;
@@ -45,18 +46,18 @@ public class PlayerController : MonoBehaviour
             //player.Translate(2 * Vector3.down * Time.deltaTime);
         }
 
-
+        //check if the palyer is moving
         if (moving)
         {
+            //depending on the lane, move the player to the next one in a specified direction.
             switch (lane)
             {
                 case "top":
                     
                     direction = Vector3.down;
-                    //print(Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) > 0.05f);
                     if (Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) > 0.05f)
                     {
-                        player.Translate(6f * direction * Time.deltaTime);
+                        player.Translate(switchSpeed * direction * Time.deltaTime);
                     }
                     else
                     {
@@ -71,11 +72,11 @@ public class PlayerController : MonoBehaviour
 
                     if (Vector3.Distance(player.position, new Vector3(player.position.x, 4.0f, 0.0f)) > 0.05f && (direction == Vector3.up))
                     {
-                        player.Translate(6f * direction * Time.deltaTime);
+                        player.Translate(switchSpeed * direction * Time.deltaTime);
                     }
                     else if(Vector3.Distance(player.position, new Vector3(player.position.x, -4.0f, 0.0f)) > 0.05f && (direction == Vector3.down))
                     {
-                        player.Translate(6f * direction * Time.deltaTime);
+                        player.Translate(switchSpeed * direction * Time.deltaTime);
                     }
                     else
                     {
@@ -99,7 +100,7 @@ public class PlayerController : MonoBehaviour
                     direction = Vector3.up;
                     if (Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) > 0.05f)
                     {
-                        player.Translate(6f * direction * Time.deltaTime);
+                        player.Translate(switchSpeed * direction * Time.deltaTime);
                     }
                     else
                     {
@@ -122,14 +123,16 @@ public class PlayerController : MonoBehaviour
 
     }
 
-
-    public void OnTriggerEnter2D(Collider2D other)
+    //Collision with a cop
+    void OnTriggerEnter2D(Collider2D other)
     {
         if(other.GetComponent<CopAI>() != null)
         {
             print("ded");
+            
             //Application.Quit();
             ScoreScript.score = 0; // score needs to reset on death
+            //Reloads the scene on death
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
