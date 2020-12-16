@@ -12,7 +12,7 @@ public class Snowball : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        controller = GameObject.Find("Main Camera");
+        controller = GameObject.Find("GameController");
         snowball = GetComponent<Rigidbody2D>();
         snowball.velocity = transform.right * (controller.GetComponent<GameController>().scale/2 * speed);
         createdTime = Time.time;

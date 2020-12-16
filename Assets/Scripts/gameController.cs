@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
     //gameObjects to move or create
-    public GameObject Player;
+    public GameObject player;
     public GameObject criminal;
     public GameObject cop;
     public GameObject background;
@@ -22,6 +23,10 @@ public class GameController : MonoBehaviour
     private bool speed3 = false;
     private bool speed4 = false;
     private bool speed5 = false;
+
+    // ui refs
+
+    public Text notifText;
 
     // Start is called before the first frame update
     void Start()
@@ -58,29 +63,34 @@ public class GameController : MonoBehaviour
         {
             speed5 = true;
             scale *= 2;
+            CauseSpeedTransition();
         }
         else if (ScoreScript.score > 40 && !speed4)
         {
             speed4 = true;
             scale *= 2;
+            CauseSpeedTransition();
         }
         else if (ScoreScript.score > 30 && !speed3)
         {
             speed3 = true;
             scale *= 2;
+            CauseSpeedTransition();
         }
         else if (ScoreScript.score > 20 && !speed2)
         {
             speed2 = true;
             scale *= 2;
+            CauseSpeedTransition();
         }
         else if (ScoreScript.score > 10 && !speed1)
         {
             speed1 = true;
             scale *= 2;
+            CauseSpeedTransition();
         }
 
-        Player.transform.Translate(scale * Vector3.right * Time.deltaTime);
+        player.transform.Translate(scale * Vector3.right * Time.deltaTime);
         Camera.main.transform.Translate(scale * Vector3.right * Time.deltaTime);
         background.transform.Translate(scale * Vector3.right * Time.deltaTime);
         // print(scale);
@@ -89,7 +99,7 @@ public class GameController : MonoBehaviour
     //Test method for speed scale debugging
     void SpawnTest()
     {
-        Instantiate(criminal, new Vector3(Player.transform.position.x + 15, Player.transform.position.y, 0), Quaternion.identity);
+        Instantiate(criminal, new Vector3(player.transform.position.x + 15, player.transform.position.y, 0), Quaternion.identity);
     }
 
     void SpawnCriminal() 
@@ -107,6 +117,29 @@ public class GameController : MonoBehaviour
         // picks a random y coord (should be within the range that snowball can possibly reach) 
         // and spawns {offset} units away from the players current x
         // criminals spawn closer, cops spawn further away
-        return new Vector3(Player.transform.position.x + offset, UnityEngine.Random.Range(-4.5f, 4.5f), 0);
+        return new Vector3(player.transform.position.x + offset, UnityEngine.Random.Range(-4.5f, 4.5f), 0);
     }
+
+
+    // i want to add a "break" when the game speeds up, despawn all enemies, show a info message
+    // so that the speed change isnt as abrupt
+    void CauseSpeedTransition() 
+    {
+        GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();
+        foreach (GameObject gameObj in allGameObjects) {
+            print(gameObj);
+            // destory all criminals and cops on screen
+            if (gameObj.GetComponent<EnemyAI>() || gameObj.GetComponent<CopAI>()) {
+                Destroy(gameObj);
+            }
+        }
+
+        // pause and restart spawning after 5 seconds
+        CancelInvoke();
+        InvokeRepeating("SpawnCriminal", 5, 2);
+        InvokeRepeating("SpawnCop", 7, 4);
+    }
+
+    
+    
 }
