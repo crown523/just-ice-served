@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -28,6 +29,8 @@ public class GameController : MonoBehaviour
 
     public Text notifText;
 
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +41,8 @@ public class GameController : MonoBehaviour
 
         //testing method for speed
         // InvokeRepeating("SpawnTest", 0, 1);
+
+       
     }
 
     // Update is called once per frame
@@ -138,8 +143,28 @@ public class GameController : MonoBehaviour
         CancelInvoke();
         InvokeRepeating("SpawnCriminal", 5, 2);
         InvokeRepeating("SpawnCop", 7, 4);
+        string msg = "You've reached " + ScoreScript.score + " points! Speeding up the game. Prepare yourself!";
+        StartCoroutine(createNotif(msg, 4));
     }
 
-    
+    IEnumerator createNotif(string msg, int time) {
+        notifText.text = msg;
+        yield return new WaitForSeconds(time);
+        notifText.text = "";
+    }
+
+    public void OnClickReplay()
+    {
+        ScoreScript.score = 0; // score needs to reset on restart
+        Time.timeScale = 1; // reset time scale
+        //CancelInvoke(); // seems to be necessary
+        // restart the game (reload scene)
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void OnClickMainMenu()
+    {
+        // nothing yet
+    }
     
 }

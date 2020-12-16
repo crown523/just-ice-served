@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
+using UnityEngine.UI;
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -18,6 +20,10 @@ public class PlayerController : MonoBehaviour
     public Transform throwLocation;
     public GameObject snowball;
 
+    // for game over FIX LATER THIS IS NOT GOOD
+    public GameObject gameOverPanel;
+    public GameObject endGameText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +35,8 @@ public class PlayerController : MonoBehaviour
         
 
         direction = Vector3.down;
+
+        gameOverPanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -130,11 +138,13 @@ public class PlayerController : MonoBehaviour
         if(other.GetComponent<CopAI>() != null || other.GetComponent<TaserScript>() != null) 
         {
             print("ded");
-            
-            //Application.Quit();
-            ScoreScript.score = 0; // score needs to reset on death
-            //Reloads the scene on death
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+            // this seems like a bad way to do it. figure out a fix later
+            // in terms of encapsulation this stuff should DEFINITELY be handled by game controller
+            // unfortunately im too braindead to figure it out atm
+            Time.timeScale = 0;
+            endGameText.GetComponent<Text>().text = "You got got. You managed to nab " + ScoreScript.score + " criminals.";
+            gameOverPanel.SetActive(true);
         }
     }
 
