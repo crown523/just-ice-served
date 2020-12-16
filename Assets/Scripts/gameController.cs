@@ -83,23 +83,23 @@ public class GameController : MonoBehaviour
         Player.transform.Translate(scale * Vector3.right * Time.deltaTime);
         Camera.main.transform.Translate(scale * Vector3.right * Time.deltaTime);
         background.transform.Translate(scale * Vector3.right * Time.deltaTime);
-        print(scale);
+        // print(scale);
     }
 
     //Test method for speed scale debugging
     void SpawnTest()
     {
-        Instantiate(criminal, new Vector3(Player.transform.position.x + 15, Player.transform.position.y, 0), new Quaternion(0, 0, 0, 0));
+        Instantiate(criminal, new Vector3(Player.transform.position.x + 15, Player.transform.position.y, 0), Quaternion.identity);
     }
 
     void SpawnCriminal() 
     {
-       Instantiate(criminal, GenerateRandomPosition(12), new Quaternion(0,0,0,0));
+       Instantiate(criminal, GenerateRandomPosition(12), Quaternion.identity);
     }
 
     void SpawnCop() 
     {
-        Instantiate(cop, GenerateRandomPosition(14), new Quaternion(0,0,0,0));
+        Instantiate(cop, GenerateRandomPosition(14), Quaternion.identity);
     }
 
     Vector3 GenerateRandomPosition(int offset) 

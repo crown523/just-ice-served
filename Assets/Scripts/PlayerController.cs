@@ -126,7 +126,8 @@ public class PlayerController : MonoBehaviour
     //Collision with a cop
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.GetComponent<CopAI>() != null)
+        // die if contact with cop or taser
+        if(other.GetComponent<CopAI>() != null || other.GetComponent<TaserScript>() != null) 
         {
             print("ded");
             

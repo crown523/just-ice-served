@@ -143,3 +143,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f082922f635ff34c91f6c83c8bf1a2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  taser: {fileID: 2392995328398208061, guid: c3fd74bd8d258444bbb797e55e91b35b, type: 3}

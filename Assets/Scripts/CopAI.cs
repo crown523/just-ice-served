@@ -41,7 +41,9 @@ public class CopAI : MonoBehaviour
 
         // change lane every 2 seconds
         InvokeRepeating("ChangeLane", 2, 2);
-        InvokeRepeating("UseTaser", 4, 4);
+
+        // since taser lasts 2 seconds, this casts taser every 2 seconds
+        InvokeRepeating("UseTaser", 4, 6);
     }
 
     // Update is called once per frame
@@ -109,7 +111,11 @@ public class CopAI : MonoBehaviour
 
     void UseTaser()
     {
+        print("taser created");
 
+        // creates taser at the "front" of the cop
+        // attached to cop as parent, so moves with it
+        Instantiate(taser, new Vector3(cop.position.x - 1, cop.position.y, cop.position.z), cop.rotation, cop);
     }
 
 }
