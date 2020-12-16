@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class Snowball : MonoBehaviour
 {
-
-    public float speed = 5.0f;
+    private GameObject controller;
+    private float speed = 5.0f;
     private Rigidbody2D snowball;
     private float createdTime;
 
     // Start is called before the first frame update
     void Start()
     {
+        controller = GameObject.Find("Main Camera");
         snowball = GetComponent<Rigidbody2D>();
-        snowball.velocity = transform.right * speed;
+        snowball.velocity = transform.right * (controller.GetComponent<GameController>().scale/2 * speed);
         createdTime = Time.time;
     }
 
