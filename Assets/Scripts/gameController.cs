@@ -27,12 +27,12 @@ public class GameController : MonoBehaviour
     void Start()
     {
         // spawn new criminals once every 2 seconds
-        //InvokeRepeating("SpawnCriminal", 2, 2);
+        InvokeRepeating("SpawnCriminal", 2, 2);
         // spawn new cop every 4 seconds
-        //InvokeRepeating("SpawnCop", 4, 4);
+        InvokeRepeating("SpawnCop", 4, 4);
 
         //testing method for speed
-        InvokeRepeating("SpawnTest", 0, 1);
+        // InvokeRepeating("SpawnTest", 0, 1);
     }
 
     // Update is called once per frame
@@ -51,6 +51,9 @@ public class GameController : MonoBehaviour
 
         //Old-fashioned score milestone based speed up system
         //goes up to five speed tiers
+
+        // i want to add a "break" when the game speeds up, despawn all enemies, show a info message
+
         if(ScoreScript.score > 50 && !speed5)
         {
             speed5 = true;

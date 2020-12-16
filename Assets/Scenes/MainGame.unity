@@ -222,7 +222,7 @@ MonoBehaviour:
     type: 3}
   cop: {fileID: 170425331591694167, guid: 6c6c80e643b65ed44bbc48aadb58421b, type: 3}
   background: {fileID: 1215988023}
-  scale: 1
+  scale: 2
   speedLimit: 0
 --- !u!1 &1215988023
 GameObject:

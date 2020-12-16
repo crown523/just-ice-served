@@ -10,9 +10,9 @@ public class CopAI : MonoBehaviour
     private bool moving;
     private Transform cop;
     private Vector3 direction;
-    private System.Random rand;
-
     private GameObject player;
+
+    public GameObject taser;
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +40,8 @@ public class CopAI : MonoBehaviour
         }
 
         // change lane every 2 seconds
-        InvokeRepeating("changeLane", 2, 2);
+        InvokeRepeating("ChangeLane", 2, 2);
+        InvokeRepeating("UseTaser", 4, 4);
     }
 
     // Update is called once per frame
@@ -79,11 +80,11 @@ public class CopAI : MonoBehaviour
         }
     }
 
-    void changeLane()
+    void ChangeLane()
     {
         print("change method called");
 
-        bool tooClose = (cop.position.x <= player.transform.position.x + 2);
+        bool tooClose = (cop.position.x <= player.transform.position.x + 3);
 
 
         // dont change lane if already moving
@@ -104,6 +105,11 @@ public class CopAI : MonoBehaviour
             }
             print(lane);
         }
+    }
+
+    void UseTaser()
+    {
+
     }
 
 }
