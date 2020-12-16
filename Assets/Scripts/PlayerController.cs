@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     // for game over FIX LATER THIS IS NOT GOOD
     public GameObject gameOverPanel;
     public GameObject endGameText;
+    public GameObject activeButton;
 
     // Start is called before the first frame update
     void Start()
@@ -42,17 +43,30 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // these keys are used for something else when game is over
+        // again kinda hacky but wtv
 
-        // handle lane changing
+        // if (!gameOverPanel.activeSelf) {
+            // handle lane changing
 
-        if (Input.GetKey("space") && !moving) 
-        {
+            // i think getkeydown makes more sense since theres no holding, could fix bugs also
+            if (Input.GetKeyDown("space") && !moving) 
+            {
 
-            moving = true;
+                moving = true;
 
-            print("moving");
-            //player.Translate(2 * Vector3.down * Time.deltaTime);
-        }
+                print("moving");
+                //player.Translate(2 * Vector3.down * Time.deltaTime);
+            }
+
+            //throw a snowball
+            if(Input.GetKeyDown("z") && Time.time > nextThrow)
+            {
+                nextThrow = Time.time + throwDelay;
+                Instantiate(snowball, throwLocation.position, throwLocation.rotation);
+            }
+        // }
+
 
         //check if the palyer is moving
         if (moving)
@@ -122,29 +136,21 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        //throw a snowball
-        if(Input.GetKey("z") && Time.time > nextThrow)
-        {
-            nextThrow = Time.time + throwDelay;
-            Instantiate(snowball, throwLocation.position, throwLocation.rotation);
-        }
-
     }
 
-    //Collision with a cop
     void OnTriggerEnter2D(Collider2D other)
     {
         // die if contact with cop or taser
         if(other.GetComponent<CopAI>() != null || other.GetComponent<TaserScript>() != null) 
         {
-            print("ded");
 
             // this seems like a bad way to do it. figure out a fix later
             // in terms of encapsulation this stuff should DEFINITELY be handled by game controller
             // unfortunately im too braindead to figure it out atm
-            Time.timeScale = 0;
-            endGameText.GetComponent<Text>().text = "You got got. You managed to nab " + ScoreScript.score + " criminals.";
+            Time.timeScale = 0; // hacky way to pause
             gameOverPanel.SetActive(true);
+            endGameText.GetComponent<Text>().text = "You got got. You managed to nab " + ScoreScript.score + " criminals.";
+            activeButton.GetComponent<Button>().Select(); // bit hacky
         }
     }
 

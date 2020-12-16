@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 439547701}
   - component: {fileID: 439547700}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: GameOverPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -313,6 +313,9 @@ MonoBehaviour:
   background: {fileID: 1215988023}
   scale: 2
   speedLimit: 0
+  gameOverPanel: {fileID: 439547698}
+  panelOpt1: {fileID: 1528641751}
+  panelOpt2: {fileID: 766935041}
   notifText: {fileID: 1045408856}
 --- !u!4 &498392619
 Transform:
@@ -341,7 +344,7 @@ GameObject:
   - component: {fileID: 766935044}
   - component: {fileID: 766935043}
   m_Layer: 5
-  m_Name: Button
+  m_Name: MainMenuButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -390,7 +393,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 0.043137256, g: 0.09803922, b: 0.9529412, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -908,6 +911,7 @@ MonoBehaviour:
     type: 3}
   gameOverPanel: {fileID: 439547698}
   endGameText: {fileID: 206505052}
+  activeButton: {fileID: 1528641751}
 --- !u!61 &1234336252
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1126,7 +1130,7 @@ GameObject:
   - component: {fileID: 1528641754}
   - component: {fileID: 1528641753}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ReplayButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1175,7 +1179,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 0.04045032, g: 0.09537883, b: 0.9528302, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -1401,7 +1405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
+  m_sendNavigationEvents: 0
   m_DragThreshold: 10
 --- !u!4 &1760094828
 Transform:

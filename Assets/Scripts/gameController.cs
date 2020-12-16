@@ -27,22 +27,28 @@ public class GameController : MonoBehaviour
 
     // ui refs
 
+    public GameObject gameOverPanel;
+    public GameObject panelOpt1;
+    public GameObject panelOpt2;
     public Text notifText;
 
+    // for nav
+
+    private int selectedOpt = 1;
+    private bool canInteract = true;
     
 
     // Start is called before the first frame update
     void Start()
     {
+        CancelInvoke(); // clear any leftover invokes
+        ScoreScript.score = 0; // score needs to reset on restart
+        Time.timeScale = 1; // reset time scale
         // spawn new criminals once every 2 seconds
         InvokeRepeating("SpawnCriminal", 2, 2);
         // spawn new cop every 4 seconds
         InvokeRepeating("SpawnCop", 4, 4);
-
-        //testing method for speed
-        // InvokeRepeating("SpawnTest", 0, 1);
-
-       
+        
     }
 
     // Update is called once per frame
@@ -99,12 +105,42 @@ public class GameController : MonoBehaviour
         Camera.main.transform.Translate(scale * Vector3.right * Time.deltaTime);
         background.transform.Translate(scale * Vector3.right * Time.deltaTime);
         // print(scale);
+
+        if (gameOverPanel.activeSelf) {
+            // if game over screen is up
+            // use buttons to navigate
+            if (Input.GetKeyDown("space") && canInteract) {
+                canInteract = false;
+                StartCoroutine(changeSelection());
+                canInteract = true;
+            }
+            if (Input.GetKeyDown("z")) {
+                switch(selectedOpt)
+                {
+                    case 1:
+                        OnClickReplay();
+                        break;
+                    case 2:
+                        OnClickMainMenu();
+                        break;
+                }
+            }
+        }
     }
 
-    //Test method for speed scale debugging
-    void SpawnTest()
-    {
-        Instantiate(criminal, new Vector3(player.transform.position.x + 15, player.transform.position.y, 0), Quaternion.identity);
+    IEnumerator changeSelection() {
+        switch (selectedOpt)
+        {
+            case 1:
+                selectedOpt = 2;
+                panelOpt2.GetComponent<Button>().Select();
+                break;
+            case 2:
+                selectedOpt = 1;
+                panelOpt1.GetComponent<Button>().Select();
+                break;
+        }
+        yield return new WaitForSeconds(1);
     }
 
     void SpawnCriminal() 
@@ -155,9 +191,6 @@ public class GameController : MonoBehaviour
 
     public void OnClickReplay()
     {
-        ScoreScript.score = 0; // score needs to reset on restart
-        Time.timeScale = 1; // reset time scale
-        //CancelInvoke(); // seems to be necessary
         // restart the game (reload scene)
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -165,6 +198,7 @@ public class GameController : MonoBehaviour
     public void OnClickMainMenu()
     {
         // nothing yet
+        SceneManager.LoadScene("MainMenu");
     }
     
 }

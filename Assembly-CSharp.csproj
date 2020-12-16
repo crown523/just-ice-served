@@ -44,6 +44,7 @@
      <Compile Include="Assets\Scripts\ScoreScript.cs" />
      <Compile Include="Assets\Scripts\Snowball.cs" />
      <Compile Include="Assets\Scripts\TaserScript.cs" />
+     <Compile Include="Assets\Scripts\UIManager.cs" />
     <Reference Include="UnityEngine">
         <HintPath>/Applications/Unity/Hub/Editor/2019.4.11f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
