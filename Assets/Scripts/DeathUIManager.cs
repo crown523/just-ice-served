@@ -14,7 +14,7 @@ public class DeathUIManager : MonoBehaviour
 
     // used to skip tutorial cutscene
     // set true when playtesting
-    public static bool replayWasClicked = true;
+    public static bool replayWasClicked = false;
 
     // Start is called before the first frame update
     void Start()
