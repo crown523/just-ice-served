@@ -9,7 +9,6 @@ public class UIManager : MonoBehaviour
 
     public GameObject opt1;
     public GameObject opt2;
-    public GameObject opt3;
 
     private bool canInteract = true;
     private int selectedOpt = 1;
@@ -37,9 +36,6 @@ public class UIManager : MonoBehaviour
                 case 2:
                     OnClickStory();
                     break;
-                case 3:
-                    OnClickTwoPlayer();
-                    break;
             }
         }
     }
@@ -52,10 +48,6 @@ public class UIManager : MonoBehaviour
                 opt2.GetComponent<Button>().Select();
                 break;
             case 2:
-                selectedOpt = 3;
-                opt3.GetComponent<Button>().Select();
-                break;
-            case 3:
                 selectedOpt = 1;
                 opt1.GetComponent<Button>().Select();
                 break;
@@ -69,11 +61,6 @@ public class UIManager : MonoBehaviour
     }
     
     public void OnClickStory()
-    {
-        // none yet
-    }
-
-    public void OnClickTwoPlayer()
     {
         // none yet
     }

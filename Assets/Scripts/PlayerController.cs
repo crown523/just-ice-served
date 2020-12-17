@@ -36,15 +36,16 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         
+        if (!EndlessGameController.isTransitioning) {
+            // prevent movement during transition phase, could fix bug 
+            if (Input.GetKeyDown("space") && !moving) 
+            {
 
-        // i think getkeydown makes more sense since theres no holding, could fix bugs also
-        if (Input.GetKeyDown("space") && !moving) 
-        {
+                moving = true;
 
-            moving = true;
-
+            }
         }
-
+        
         //throw a snowball
         if(Input.GetKeyDown("z") && Time.time > nextThrow)
         {
@@ -66,7 +67,6 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-
                         moving = false;
                         lane = "mid";
                     }
@@ -75,11 +75,11 @@ public class PlayerController : MonoBehaviour
 
                 case "mid":
 
-                    if (Vector3.Distance(player.position, new Vector3(player.position.x, 4.0f, 0.0f)) > 0.075f && (direction == Vector3.up))
+                    if ((direction == Vector3.up) && Vector3.Distance(player.position, new Vector3(player.position.x, 4.0f, 0.0f)) > 0.075f)
                     {
                         player.Translate(switchSpeed * direction * Time.deltaTime);
                     }
-                    else if (Vector3.Distance(player.position, new Vector3(player.position.x, -4.0f, 0.0f)) > 0.075f && (direction == Vector3.down))
+                    else if ((direction == Vector3.down) && Vector3.Distance(player.position, new Vector3(player.position.x, -4.0f, 0.0f)) > 0.075f)
                     {
                         player.Translate(switchSpeed * direction * Time.deltaTime);
                     }
@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour
                     {
 
                         moving = false;
-                        if (Vector3.Distance(player.position, new Vector3(player.position.x, 4.0f, 0.0f)) > Vector3.Distance(player.position, new Vector3(player.position.x, -4.0f, 0.0f)))
+                        if (direction == Vector3.down)
                         {
                             lane = "bot";
                         }
@@ -123,10 +123,53 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    void FixedUpdate()
+    {
+        if(moving) 
+        {
+            switch (lane)
+            {
+                case "top":
+                    if (Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) < 0.075f)
+                    {
+                        moving = false;
+                        lane = "mid";
+                    }
+                    break;
+
+                case "mid":
+
+                    if ((direction == Vector3.up) && Vector3.Distance(player.position, new Vector3(player.position.x, 4.0f, 0.0f)) < 0.075f
+                    || ((direction == Vector3.down) && Vector3.Distance(player.position, new Vector3(player.position.x, -4.0f, 0.0f)) < 0.075f))
+                    {
+                        moving = false;
+                        if (direction == Vector3.down)
+                        {
+                            lane = "bot";
+                        }
+                        else
+                        {
+                            lane = "top";
+                        }
+                    }
+                    break;
+
+                case "bot":
+                    if (Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) < 0.075f)
+                    {
+                        moving = false;
+                        lane = "mid";
+                    }
+                    break;
+
+            }
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         // die if contact with cop or taser
-        if(other.GetComponent<CopAI>() != null || other.GetComponent<TaserScript>() != null) 
+        if(other.GetComponent<CopAI>() || other.GetComponent<TaserScript>()) 
         {
             //Move to the Death Screen
             SceneManager.LoadScene("DeathScreen");
