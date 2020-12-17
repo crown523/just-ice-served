@@ -30,17 +30,30 @@ public class EndlessGameController : MonoBehaviour
     
     public Text notifText;
 
+    // other state vars
+    
+    public static bool isTransitioning = false;
+
     // Start is called before the first frame update
     void Start()
     {
         CancelInvoke(); // clear any leftover invokes
         notifText = GameObject.Find("notifText").GetComponent<Text>();
+        scale = 2f;
         ScoreScript.score = 0; // score needs to reset on restart
-        Time.timeScale = 1; // reset time scale
-        // spawn new criminals once every 2 seconds
-        InvokeRepeating("SpawnCriminal", 2, 2);
-        // spawn new cop every 4 seconds
-        InvokeRepeating("SpawnCop", 4, 4);
+        if (!DeathUIManager.replayWasClicked) 
+        {
+            StartCoroutine(GameStartCutscene());
+        }
+        else
+        {
+            // spawn new criminals once every 2 seconds
+            InvokeRepeating("SpawnCriminal", 2, 2);
+            // spawn new cop every 4 seconds
+            InvokeRepeating("SpawnCop", 4, 4);
+        }
+        
+
         
     }
 
@@ -61,36 +74,34 @@ public class EndlessGameController : MonoBehaviour
         //Old-fashioned score milestone based speed up system
         //goes up to five speed tiers
 
-        // i want to add a "break" when the game speeds up, despawn all enemies, show a info message
-
         if(ScoreScript.score >= 50 && !speed5)
         {
             speed5 = true;
-            scale *= 2;
+            scale *= 1.5f;
             CauseSpeedTransition();
         }
         else if (ScoreScript.score >= 40 && !speed4)
         {
             speed4 = true;
-            scale *= 2;
+            scale *= 1.5f;
             CauseSpeedTransition();
         }
         else if (ScoreScript.score >= 30 && !speed3)
         {
             speed3 = true;
-            scale *= 2;
+            scale *= 1.5f;
             CauseSpeedTransition();
         }
         else if (ScoreScript.score >= 20 && !speed2)
         {
             speed2 = true;
-            scale *= 2;
+            scale *= 1.5f;
             CauseSpeedTransition();
         }
         else if (ScoreScript.score >= 10 && !speed1)
         {
             speed1 = true;
-            scale *= 2;
+            scale *= 1.5f;
             CauseSpeedTransition();
         }
 
@@ -122,10 +133,40 @@ public class EndlessGameController : MonoBehaviour
     }
 
 
+    // instructions "cutscene" at start of game
+    IEnumerator GameStartCutscene()
+    {
+
+        StartCoroutine(CreateNotif("Welcome to endless mode.", 3));
+        yield return new WaitForSeconds(3);
+        StartCoroutine(CreateNotif("Press space to move to an adjacent lane. You'll start off moving down, and change directions when in the top or bottom lane.", 4));
+        yield return new WaitForSeconds(5);
+        Instantiate(criminal, new Vector3(player.transform.position.x + 12, 0, 0), Quaternion.identity);
+        StartCoroutine(CreateNotif("This is a criminal. Press 'z' to throw a snowball and hit criminals to gain points.", 3));
+        yield return new WaitForSeconds(3);
+        Instantiate(cop, new Vector3(player.transform.position.x + 14, 0, 0), Quaternion.identity);
+        StartCoroutine(CreateNotif("This is a cop. Cops will change lanes and occasionally shoot out tasers.", 3));
+        yield return new WaitForSeconds(3);
+        StartCoroutine(CreateNotif("Hitting a cop with a snowball loses you points, and running into a cop or their taser ends the game.", 3));
+        yield return new WaitForSeconds(3);
+        StartCoroutine(CreateNotif("Good luck! Aim for as high a score as you can!", 3));
+
+        // start the game proper
+
+        yield return new WaitForSeconds(3);
+
+        // spawn new criminals once every 2 seconds
+        InvokeRepeating("SpawnCriminal", 2, 2);
+        // spawn new cop every 4 seconds
+        InvokeRepeating("SpawnCop", 4, 4);
+        ScoreScript.score = 0;
+    }
+
     // i want to add a "break" when the game speeds up, despawn all enemies, show a info message
     // so that the speed change isnt as abrupt
     void CauseSpeedTransition() 
     {
+        isTransitioning = true;
         GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();
         foreach (GameObject gameObj in allGameObjects) {
             print(gameObj);
@@ -140,15 +181,14 @@ public class EndlessGameController : MonoBehaviour
         InvokeRepeating("SpawnCriminal", 5, 2);
         InvokeRepeating("SpawnCop", 7, 4);
         string msg = "You've reached " + ScoreScript.score + " points! Speeding up the game. Prepare yourself!";
-        StartCoroutine(createNotif(msg, 4));
+        StartCoroutine(CreateNotif(msg, 4));
+        isTransitioning = false;
     }
 
-    IEnumerator createNotif(string msg, int time) {
+    IEnumerator CreateNotif(string msg, int time) {
         notifText.text = msg;
         yield return new WaitForSeconds(time);
         notifText.text = "";
     }
 
-   
-    
 }
