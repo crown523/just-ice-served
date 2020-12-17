@@ -26,22 +26,14 @@ public class GameController : MonoBehaviour
     private bool speed5 = false;
 
     // ui refs
-
-    public GameObject gameOverPanel;
-    public GameObject panelOpt1;
-    public GameObject panelOpt2;
-    public Text notifText;
-
-    // for nav
-
-    private int selectedOpt = 1;
-    private bool canInteract = true;
     
+    public Text notifText;
 
     // Start is called before the first frame update
     void Start()
     {
         CancelInvoke(); // clear any leftover invokes
+        notifText = GameObject.Find("notifText").GetComponent<Text>();
         ScoreScript.score = 0; // score needs to reset on restart
         Time.timeScale = 1; // reset time scale
         // spawn new criminals once every 2 seconds
@@ -106,42 +98,9 @@ public class GameController : MonoBehaviour
         background.transform.Translate(scale * Vector3.right * Time.deltaTime);
         // print(scale);
 
-        if (gameOverPanel.activeSelf) {
-            // if game over screen is up
-            // use buttons to navigate
-            if (Input.GetKeyDown("space") && canInteract) {
-                canInteract = false;
-                StartCoroutine(changeSelection());
-                canInteract = true;
-            }
-            if (Input.GetKeyDown("z")) {
-                switch(selectedOpt)
-                {
-                    case 1:
-                        OnClickReplay();
-                        break;
-                    case 2:
-                        OnClickMainMenu();
-                        break;
-                }
-            }
-        }
     }
 
-    IEnumerator changeSelection() {
-        switch (selectedOpt)
-        {
-            case 1:
-                selectedOpt = 2;
-                panelOpt2.GetComponent<Button>().Select();
-                break;
-            case 2:
-                selectedOpt = 1;
-                panelOpt1.GetComponent<Button>().Select();
-                break;
-        }
-        yield return new WaitForSeconds(1);
-    }
+    
 
     void SpawnCriminal() 
     {
@@ -189,16 +148,6 @@ public class GameController : MonoBehaviour
         notifText.text = "";
     }
 
-    public void OnClickReplay()
-    {
-        // restart the game (reload scene)
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    public void OnClickMainMenu()
-    {
-        // nothing yet
-        SceneManager.LoadScene("MainMenu");
-    }
+   
     
 }
