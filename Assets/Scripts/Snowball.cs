@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Snowball : MonoBehaviour
 {
-
+    //string check for the current gamemode
     private string scene;
 
     private GameObject controller;

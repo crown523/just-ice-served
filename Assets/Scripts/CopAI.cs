@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CopAI : MonoBehaviour
 {
+    //string check for the current gamemode
+    private string scene;
 
     //variables for movement
     string lane;
