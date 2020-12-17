@@ -105,7 +105,7 @@ public class CopAI : MonoBehaviour
                     lane = "bot";
                     break;
             }
-            print(lane);
+            //print(lane);
         }
     }
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -20,91 +20,74 @@ public class PlayerController : MonoBehaviour
     public Transform throwLocation;
     public GameObject snowball;
 
-    // for game over FIX LATER THIS IS NOT GOOD
-    public GameObject gameOverPanel;
-    public GameObject endGameText;
-    public GameObject activeButton;
-
     // Start is called before the first frame update
     void Start()
     {
         player = GetComponent<Transform>();
         player.position = new Vector3(-5.0f, 0, 0.0f);
-        lane = "top";
+        lane = "mid";
 
         moving = false;
         
-
         direction = Vector3.down;
-
-        gameOverPanel.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        // these keys are used for something else when game is over
-        // again kinda hacky but wtv
+        
 
-        // if (!gameOverPanel.activeSelf) {
-            // handle lane changing
+        // i think getkeydown makes more sense since theres no holding, could fix bugs also
+        if (Input.GetKeyDown("space") && !moving) 
+        {
 
-            // i think getkeydown makes more sense since theres no holding, could fix bugs also
-            if (Input.GetKeyDown("space") && !moving) 
-            {
+            moving = true;
 
-                moving = true;
+        }
 
-                print("moving");
-                //player.Translate(2 * Vector3.down * Time.deltaTime);
-            }
+        //throw a snowball
+        if(Input.GetKeyDown("z") && Time.time > nextThrow)
+        {
+            nextThrow = Time.time + throwDelay;
+            Instantiate(snowball, throwLocation.position, throwLocation.rotation);
+        }
 
-            //throw a snowball
-            if(Input.GetKeyDown("z") && Time.time > nextThrow)
-            {
-                nextThrow = Time.time + throwDelay;
-                Instantiate(snowball, throwLocation.position, throwLocation.rotation);
-            }
-        // }
-
-
-        //check if the palyer is moving
-        if (moving)
+        if(moving)
         {
             //depending on the lane, move the player to the next one in a specified direction.
             switch (lane)
             {
                 case "top":
-                    
+
                     direction = Vector3.down;
-                    if (Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) > 0.05f)
+                    if (Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) > 0.075f)
                     {
                         player.Translate(switchSpeed * direction * Time.deltaTime);
                     }
                     else
                     {
-                        
+
                         moving = false;
                         lane = "mid";
                     }
 
                     break;
-                    
+
                 case "mid":
 
-                    if (Vector3.Distance(player.position, new Vector3(player.position.x, 4.0f, 0.0f)) > 0.05f && (direction == Vector3.up))
+                    if (Vector3.Distance(player.position, new Vector3(player.position.x, 4.0f, 0.0f)) > 0.075f && (direction == Vector3.up))
                     {
                         player.Translate(switchSpeed * direction * Time.deltaTime);
                     }
-                    else if(Vector3.Distance(player.position, new Vector3(player.position.x, -4.0f, 0.0f)) > 0.05f && (direction == Vector3.down))
+                    else if (Vector3.Distance(player.position, new Vector3(player.position.x, -4.0f, 0.0f)) > 0.075f && (direction == Vector3.down))
                     {
                         player.Translate(switchSpeed * direction * Time.deltaTime);
                     }
                     else
                     {
-                        
+
                         moving = false;
-                        if(Vector3.Distance(player.position, new Vector3(player.position.x, 4.0f, 0.0f)) > Vector3.Distance(player.position, new Vector3(player.position.x, -4.0f, 0.0f)))
+                        if (Vector3.Distance(player.position, new Vector3(player.position.x, 4.0f, 0.0f)) > Vector3.Distance(player.position, new Vector3(player.position.x, -4.0f, 0.0f)))
                         {
                             lane = "bot";
                         }
@@ -112,7 +95,7 @@ public class PlayerController : MonoBehaviour
                         {
                             lane = "top";
                         }
-                        
+
                     }
 
                     break;
@@ -120,20 +103,22 @@ public class PlayerController : MonoBehaviour
                 case "bot":
 
                     direction = Vector3.up;
-                    if (Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) > 0.05f)
+                    if (Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) > 0.075f)
                     {
                         player.Translate(switchSpeed * direction * Time.deltaTime);
                     }
                     else
                     {
-                        
+
                         moving = false;
                         lane = "mid";
                     }
 
                     break;
-                    
+
             }
+
+            print(lane);
         }
 
     }
@@ -143,14 +128,8 @@ public class PlayerController : MonoBehaviour
         // die if contact with cop or taser
         if(other.GetComponent<CopAI>() != null || other.GetComponent<TaserScript>() != null) 
         {
-
-            // this seems like a bad way to do it. figure out a fix later
-            // in terms of encapsulation this stuff should DEFINITELY be handled by game controller
-            // unfortunately im too braindead to figure it out atm
-            Time.timeScale = 0; // hacky way to pause
-            gameOverPanel.SetActive(true);
-            endGameText.GetComponent<Text>().text = "You got got. You managed to nab " + ScoreScript.score + " criminals.";
-            activeButton.GetComponent<Button>().Select(); // bit hacky
+            //Move to the Death Screen
+            SceneManager.LoadScene("DeathScreen");
         }
     }
 

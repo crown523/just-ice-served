@@ -65,7 +65,7 @@ public class UIManager : MonoBehaviour
 
     public void OnClickEndless()
     {
-        SceneManager.LoadScene("MainGame");
+        SceneManager.LoadScene("EndlessMode");
     }
     
     public void OnClickStory()

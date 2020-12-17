@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 91a14a52bd2654292a4deb482fd79c93
   - enabled: 1
-    path: Assets/Scenes/MainGame.unity
+    path: Assets/Scenes/EndlessMode.unity
     guid: ab1b88d3c2803487b9ea9ebe81c48ea7
+  - enabled: 1
+    path: Assets/Scenes/DeathScreen.unity
+    guid: 2b392cb636f0be5469efd9d5f5881cb7
   m_configObjects: {}
