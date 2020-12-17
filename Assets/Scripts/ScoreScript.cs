@@ -21,11 +21,6 @@ public class ScoreScript : MonoBehaviour
         endScore = GameObject.Find("EndScoreText");
         panelOpt1 = GameObject.Find("ReplayButton");
         panelOpt2 = GameObject.Find("MainMenuButton");
-
-        if(panelOpt1 != null)
-        {
-            panelOpt1.GetComponent<Button>().Select();
-        }
         
     }
 
@@ -36,6 +31,7 @@ public class ScoreScript : MonoBehaviour
 
         if (endScore != null)
         {
+            panelOpt1.GetComponent<Button>().Select();
             endScore.GetComponent<Text>().text = "You got got. You managed to nab " + score + " criminals.";
             // if game over screen is up
             // use buttons to navigate
@@ -84,7 +80,7 @@ public class ScoreScript : MonoBehaviour
 
     public void OnClickMainMenu()
     {
-        // nothing yet
+        // Returns to main menu
         SceneManager.LoadScene("MainMenu");
     }
 
