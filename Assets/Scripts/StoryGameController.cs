@@ -20,6 +20,9 @@ public class StoryGameController : MonoBehaviour
     void Start()
     {
         CancelInvoke(); // clear any leftover invokes
+        //set the check for having beat the boss to false
+        ScoreScript.bossBeat = false;
+        
         notifText = GameObject.Find("notifText").GetComponent<Text>();
         //StartCoroutine(GameStartCutscene());
     }

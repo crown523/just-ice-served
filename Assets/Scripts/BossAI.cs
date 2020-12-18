@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BossAI : MonoBehaviour
 {
@@ -12,8 +13,8 @@ public class BossAI : MonoBehaviour
     private Vector3 direction;
 
 
-    private Transform throwLocation;
-    public GameObject snowball;
+    public Transform throwLocation;
+    public GameObject bossSnowball;
 
     public float followTiming = 0.5f;
     public int HP;
@@ -30,8 +31,8 @@ public class BossAI : MonoBehaviour
         // change lane every 2 seconds
         InvokeRepeating("FollowPlayer", followTiming, followTiming);
 
-        // since taser lasts 2 seconds, this casts taser every 2 seconds
-        //InvokeRepeating("ThrowSnowball", 4, 6);
+        // Throw a snowball every so often
+        //InvokeRepeating("ThrowSnowball", 1, 2);
     }
 
     // Update is called once per frame
@@ -62,6 +63,14 @@ public class BossAI : MonoBehaviour
                 }
                 break;
         }
+
+        //Once you beat the boss, transition to the end screen
+        if(HP <= 0)
+        {
+            ScoreScript.bossBeat = true;
+            SceneManager.LoadScene("StoryEndScreen");
+        }
+
     }
 
     void FollowPlayer()
@@ -78,6 +87,6 @@ public class BossAI : MonoBehaviour
 
     void ThrowSnowball()
     {
-        Instantiate(snowball, throwLocation.position, throwLocation.rotation);
+        Instantiate(bossSnowball, throwLocation.position, throwLocation.rotation);
     }
 }

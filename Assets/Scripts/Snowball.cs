@@ -67,6 +67,12 @@ public class Snowball : MonoBehaviour
                 ScoreScript.score--;
             }
         }
-        
+        else if (other.GetComponent<BossAI>() != null)
+        {
+            Destroy(gameObject);
+            other.GetComponent<BossAI>().HP -= 10;
+        }
+
+
     }
 }
