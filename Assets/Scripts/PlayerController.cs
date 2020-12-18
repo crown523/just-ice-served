@@ -176,4 +176,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public string GetLane()
+    {
+        return lane;
+    }
+
 }

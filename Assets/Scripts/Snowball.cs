@@ -17,11 +17,19 @@ public class Snowball : MonoBehaviour
     void Start()
     {
         scene = SceneManager.GetActiveScene().name;
-
-        controller = GameObject.Find("GameController");
         snowball = GetComponent<Rigidbody2D>();
-        snowball.velocity = transform.right * (controller.GetComponent<EndlessGameController>().scale/2 * speed);
+        controller = GameObject.Find("GameController");
         createdTime = Time.time;
+
+        if(scene.Equals("EndlessMode"))
+        {
+            snowball.velocity = transform.right * (controller.GetComponent<EndlessGameController>().scale / 2 * speed);
+        }
+        else
+        {
+            snowball.velocity = transform.right * (controller.GetComponent<StoryGameController>().snowballSpeed / 2 * speed);
+        }
+        
     }
 
     void Update()
@@ -43,12 +51,21 @@ public class Snowball : MonoBehaviour
             //Destroy(other.GetComponent<Collider2D>().gameObject);
             Destroy(other.gameObject);
             Destroy(gameObject);
-            ScoreScript.score++;
+
+            if (scene.Equals("EndlessMode"))
+            {
+                ScoreScript.score++;
+            }
+            
         }
         else if(other.GetComponent<CopAI>() != null)
         {
             Destroy(gameObject);
-            ScoreScript.score--;
+
+            if (scene.Equals("EndlessMode"))
+            {
+                ScoreScript.score--;
+            }
         }
         
     }

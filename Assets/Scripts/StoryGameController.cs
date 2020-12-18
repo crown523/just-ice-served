@@ -8,7 +8,8 @@ public class StoryGameController : MonoBehaviour
 
     //Movement for story mode
 
-    private float scale;
+    public float playerSpeed;
+    public float snowballSpeed;
     public GameObject player;
 
     // ui refs
@@ -20,13 +21,13 @@ public class StoryGameController : MonoBehaviour
     {
         CancelInvoke(); // clear any leftover invokes
         notifText = GameObject.Find("notifText").GetComponent<Text>();
-        StartCoroutine(GameStartCutscene());
+        //StartCoroutine(GameStartCutscene());
     }
 
     // Update is called once per frame
     void Update()
     {
-        player.transform.Translate(scale * Vector3.right * Time.deltaTime);
+        player.transform.Translate(playerSpeed * Vector3.right * Time.deltaTime);
     }
 
     // instructions "cutscene" at start of game
@@ -34,7 +35,8 @@ public class StoryGameController : MonoBehaviour
     {
 
         StartCoroutine(CreateNotif("Welcome to story mode.", 3));
-        /*
+        yield return new WaitForSeconds(3);
+        StartCoroutine(CreateNotif("After a thug knocked over your little sibling's snowman, you've taken it upon yourself to hunt down every criminal in the vicinity of your neighborhood.", 5));
         yield return new WaitForSeconds(3);
         StartCoroutine(CreateNotif("Press space to move to an adjacent lane. You'll start off moving down, and change directions when in the top or bottom lane.", 4));
         yield return new WaitForSeconds(5);
@@ -47,13 +49,13 @@ public class StoryGameController : MonoBehaviour
         StartCoroutine(CreateNotif("Cops will block snowballs, and running into a cop or their taser ends the game.", 3));
         yield return new WaitForSeconds(3);
         StartCoroutine(CreateNotif("Try and apprehend all criminals whle avoiding the cops.", 3));
-        */
+        
 
         // start the game proper
 
         yield return new WaitForSeconds(3);
 
-        scale = 2.5f;
+        playerSpeed = 2.5f;
     }
 
     IEnumerator CreateNotif(string msg, int time)

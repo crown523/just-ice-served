@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CopAI : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class CopAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        scene = SceneManager.GetActiveScene().name;
 
         player = GameObject.Find("Player");
 
@@ -90,11 +92,10 @@ public class CopAI : MonoBehaviour
 
         bool tooClose = (cop.position.x <= player.transform.position.x + 3);
 
-
         // dont change lane if already moving
         // AND dont change lane if too close to the player (could be undodgeable)
         if (!moving && !tooClose) {
-            print("SWITCHING LANE");
+            //print("SWITCHING LANE");
             switch (Random.Range(1, 4))
             {
                 case 1:
@@ -113,7 +114,7 @@ public class CopAI : MonoBehaviour
 
     void UseTaser()
     {
-        print("taser created");
+        //print("taser created");
 
         // creates taser at the "front" of the cop
         // attached to cop as parent, so moves with it
