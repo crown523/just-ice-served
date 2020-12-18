@@ -89,7 +89,7 @@ public class StoryEndUI : MonoBehaviour
     {
         // restart Endless Mode
         replayWasClicked = true;
-        SceneManager.LoadScene("EndlessMode");
+        SceneManager.LoadScene("StoryMode");
     }
 
     public void OnClickMainMenu()

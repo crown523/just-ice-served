@@ -41,7 +41,7 @@ public class BossSnowball : MonoBehaviour
         {
             //Destroy(other.gameObject);
             Destroy(gameObject);
-            other.GetComponent<>().HP -= 10;
+            other.GetComponent<PlayerController>().HP -= 10;
 
         }
 

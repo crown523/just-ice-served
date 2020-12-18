@@ -32,7 +32,7 @@ public class BossAI : MonoBehaviour
         InvokeRepeating("FollowPlayer", followTiming, followTiming);
 
         // Throw a snowball every so often
-        //InvokeRepeating("ThrowSnowball", 1, 2);
+        InvokeRepeating("ThrowSnowball", 1, 2);
     }
 
     // Update is called once per frame

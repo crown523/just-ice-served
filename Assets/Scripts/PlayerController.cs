@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    //check the scene to transition to the right game end scene
+    private string scene;
+
     //variables for movement
     private string lane;
     private bool moving;
@@ -20,9 +23,14 @@ public class PlayerController : MonoBehaviour
     public Transform throwLocation;
     public GameObject snowball;
 
+    //HP that is only used during the story mode bossfight
+    public float HP;
+
     // Start is called before the first frame update
     void Start()
     {
+        scene = SceneManager.GetActiveScene().name;
+
         player = GetComponent<Transform>();
         player.position = new Vector3(-5.0f, 0, 0.0f);
         lane = "mid";
@@ -121,6 +129,12 @@ public class PlayerController : MonoBehaviour
             print(lane);
         }
 
+        //if your hp drops to 0 during the bossfight
+        if (scene.Equals("StoryMode") && HP <= 0)
+        {
+            SceneManager.LoadScene("StoryEndScreen");
+        }
+
     }
 
     void FixedUpdate()
@@ -171,9 +185,18 @@ public class PlayerController : MonoBehaviour
         // die if contact with cop or taser
         if(other.GetComponent<CopAI>() || other.GetComponent<TaserScript>()) 
         {
-            //Move to the Death Screen
-            SceneManager.LoadScene("DeathScreen");
+            //Move to the Death Screen if in endless mode
+            if(scene.Equals("EndlessMode"))
+            {
+                SceneManager.LoadScene("DeathScreen");
+            }
+            else
+            {
+                SceneManager.LoadScene("StoryEndScreen");
+            }
+            
         }
+        
     }
 
     public string GetLane()
