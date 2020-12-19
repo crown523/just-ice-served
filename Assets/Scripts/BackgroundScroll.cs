@@ -1,15 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BackgroundScroll : MonoBehaviour
 {
+    //check the active gamemode
+    private string scene;
+
     public float speed = 0f;
     private MeshRenderer mesh;
     private float ScreenHeight, ScreenWidth;
 
     void Start()
     {
+        scene = SceneManager.GetActiveScene().name;
+
         //get the background's texture
         mesh = GetComponent<MeshRenderer>();
 

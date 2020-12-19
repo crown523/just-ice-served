@@ -62,6 +62,6 @@ public class UIManager : MonoBehaviour
     
     public void OnClickStory()
     {
-        // none yet
+        SceneManager.LoadScene("StoryMode");
     }
 }

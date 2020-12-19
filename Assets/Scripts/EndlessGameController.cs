@@ -28,7 +28,7 @@ public class EndlessGameController : MonoBehaviour
 
     // ui refs
     
-    public Text notifText;
+    private Text notifText;
 
     // other state vars
     
@@ -39,7 +39,8 @@ public class EndlessGameController : MonoBehaviour
     {
         CancelInvoke(); // clear any leftover invokes
         notifText = GameObject.Find("notifText").GetComponent<Text>();
-        scale = 2f;
+        
+        //scale = 2f;
         ScoreScript.score = 0; // score needs to reset on restart
         if (!DeathUIManager.replayWasClicked) 
         {

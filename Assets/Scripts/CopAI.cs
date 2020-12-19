@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CopAI : MonoBehaviour
 {
+    //string check for the current gamemode
+    private string scene;
 
     //variables for movement
-    string lane;
+    public string lane;
     private bool moving;
     private Transform cop;
     private Vector3 direction;
@@ -17,30 +20,61 @@ public class CopAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        scene = SceneManager.GetActiveScene().name;
 
         player = GameObject.Find("Player");
 
         cop = GetComponent<Transform>();
         moving = false;
 
-        // correct for position generated in controller
-        // controller generates based on a continuous distribution, but we need discrete
+        //Added a scene check to make the cops simpler to hardcode for Story Mode
+        if (scene.Equals("EndlessMode"))
+        {
+            // correct for position generated in controller
+            // controller generates based on a continuous distribution, but we need discrete
 
-        float ylevel = cop.position.y;
+            float ylevel = cop.position.y;
 
-        if (ylevel >= 3) {
-            cop.position = new Vector3(cop.position.x, 4.0f, 0.0f);
-            lane = "top";
-        } else if (ylevel >= -3) {
-            cop.position = new Vector3(cop.position.x, 0.0f, 0.0f);
-            lane = "mid";
-        } else {
-            cop.position = new Vector3(cop.position.x, -4.0f, 0.0f);
-            lane = "bot";
+            if (ylevel >= 3)
+            {
+                cop.position = new Vector3(cop.position.x, 4.0f, 0.0f);
+                lane = "top";
+            }
+            else if (ylevel >= -3)
+            {
+                cop.position = new Vector3(cop.position.x, 0.0f, 0.0f);
+                lane = "mid";
+            }
+            else
+            {
+                cop.position = new Vector3(cop.position.x, -4.0f, 0.0f);
+                lane = "bot";
+            }
+            // change lane (endless mode) every 2 seconds
+            InvokeRepeating("ChangeLaneEndless", 2, 2);
         }
+        else
+        {
+            switch(lane)
+            {
+                case "top":
+                    cop.position = new Vector3(cop.position.x, 4.0f, 0.0f);
+                    direction = Vector3.down;
+                    break;
+                case "mid":
+                    cop.position = new Vector3(cop.position.x, 0.0f, 0.0f);
+                    direction = Vector3.down;
+                    break;
+                case "bot":
+                    cop.position = new Vector3(cop.position.x, -4.0f, 0.0f);
+                    direction = Vector3.up;
+                    break;
+            }
 
-        // change lane every 2 seconds
-        InvokeRepeating("ChangeLane", 2, 2);
+            // change lane (story mode) every 2 seconds
+            InvokeRepeating("ChangeLaneStory", 2, 2);
+
+        }
 
         // since taser lasts 2 seconds, this casts taser every 2 seconds
         InvokeRepeating("UseTaser", 4, 6);
@@ -82,17 +116,17 @@ public class CopAI : MonoBehaviour
         }
     }
 
-    void ChangeLane()
+    //Random lane change style for endless mode
+    void ChangeLaneEndless()
     {
-        print("change method called");
+        //print("change method called");
 
         bool tooClose = (cop.position.x <= player.transform.position.x + 3);
-
 
         // dont change lane if already moving
         // AND dont change lane if too close to the player (could be undodgeable)
         if (!moving && !tooClose) {
-            print("SWITCHING LANE");
+            //print("SWITCHING LANE");
             switch (Random.Range(1, 4))
             {
                 case 1:
@@ -109,9 +143,41 @@ public class CopAI : MonoBehaviour
         }
     }
 
+    void ChangeLaneStory()
+    {
+        bool tooClose = (cop.position.x <= player.transform.position.x + 3);
+
+        if(!tooClose)
+        {
+            if (lane.Equals("top"))
+            {
+                direction = Vector3.down;
+                lane = "mid";
+            }
+            else if (lane.Equals("mid"))
+            {
+                if (direction.Equals(Vector3.up))
+                {
+                    lane = "top";
+                }
+                else
+                {
+                    lane = "bot";
+                }
+            }
+            else
+            {
+                direction = Vector3.up;
+                lane = "mid";
+            }
+        }
+
+        
+    }
+
     void UseTaser()
     {
-        print("taser created");
+        //print("taser created");
 
         // creates taser at the "front" of the cop
         // attached to cop as parent, so moves with it
