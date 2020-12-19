@@ -31,13 +31,16 @@ public class StoryScorebar : MonoBehaviour
             barLabel.text = "Progress";
             if (scoreBar.value < (float) enemiesBeat / totalEnemies)
             {
-                scoreBar.value += 0.0043f;
+                scoreBar.value += 0.0043f; // creates gradual fill effect (although its pretty fast lmao)
             }
         }
         else
         {
             barLabel.text = "Boss HP";
-            if (scoreBar.value > (float) )
+            if (scoreBar.value > (float) bossHP / 100)
+            {
+                scoreBar.value -= 0.0043f;
+            }
         }
         
         
