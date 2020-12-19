@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class ScoreScript : MonoBehaviour
 {
     public static int score = 0;
+
+    //this is set in the storygamecontroller script due to how that script functions
     public static int totalEnemies = 0;
     public static bool bossBeat = false;
     Text scoreCounter;
@@ -15,17 +17,12 @@ public class ScoreScript : MonoBehaviour
     void Start()
     {
         scoreCounter = GetComponent<Text>();
-        if(SceneManager.GetActiveScene().name.Equals("StoryMode"))
-        {
-            totalEnemies = GameObject.FindObjectsOfType(typeof(EnemyAI)).Length;
-        }
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        scoreCounter.text = "Criminals served: " + score;
+        scoreCounter.text = "Criminals served: " + score + "/" + totalEnemies;
        
     }
 

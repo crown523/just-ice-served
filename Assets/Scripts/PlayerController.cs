@@ -23,8 +23,9 @@ public class PlayerController : MonoBehaviour
     public Transform throwLocation;
     public GameObject snowball;
 
-    //HP that is only used during the story mode bossfight
+    //variables only used in story mode
     public float HP;
+    public bool finished = false;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour
 
         player = GetComponent<Transform>();
         player.position = new Vector3(-5.0f, 0, 0.0f);
+        
         lane = "mid";
 
         moving = false;
@@ -195,6 +197,11 @@ public class PlayerController : MonoBehaviour
                 SceneManager.LoadScene("StoryEndScreen");
             }
             
+        }
+        else if(other.name.Equals("FinishLine"))
+        {
+            print("done");
+            finished = true;
         }
         
     }

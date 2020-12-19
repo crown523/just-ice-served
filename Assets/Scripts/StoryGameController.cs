@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class StoryGameController : MonoBehaviour
 {
@@ -20,16 +21,22 @@ public class StoryGameController : MonoBehaviour
     public GameObject hardcodedInstances;
     public GameObject boss;
     public GameObject background;
+    private bool bossFight;
 
     // Start is called before the first frame update
     void Start()
     {
         CancelInvoke(); // clear any leftover invokes
+
+        scrollSpeed = 0f;
+        background.GetComponent<BackgroundScroll>().speed = 0f;
+        bossFight = false;
+
         //set the check for having beat the boss to false
         ScoreScript.bossBeat = false;
+        ScoreScript.score = 0;
+
         
-        //was used for testing the end screens
-        //ScoreScript.score = GameObject.FindObjectsOfType(typeof(EnemyAI)).Length;
 
         notifText = GameObject.Find("notifText").GetComponent<Text>();
 
@@ -44,12 +51,31 @@ public class StoryGameController : MonoBehaviour
         player.transform.Translate(scrollSpeed * Vector3.right * Time.deltaTime);
         Camera.main.transform.Translate(scrollSpeed * Vector3.right * Time.deltaTime);
         background.transform.Translate(scrollSpeed * Vector3.right * Time.deltaTime);
+
+        if(player.GetComponent<PlayerController>().finished && !bossFight)
+        {
+            bossFight = true;
+            if (ScoreScript.score >= ScoreScript.totalEnemies)
+            {
+                Destroy(GameObject.Find("FinishLine"));
+                
+                scrollSpeed = 0f;
+                background.GetComponent<BackgroundScroll>().speed = 0f;
+                Instantiate(boss, new Vector3(player.transform.position.x + 12, 0, 0), Quaternion.identity);
+            }
+            else
+            {
+                SceneManager.LoadScene("StoryEndScreen");
+            }
+            
+        }
+        
     }
 
     // instructions "cutscene" at start of game
     IEnumerator GameStartCutscene()
     {
-
+        
         StartCoroutine(CreateNotif("Welcome to story mode.", 3));
         yield return new WaitForSeconds(3);
 
@@ -81,11 +107,18 @@ public class StoryGameController : MonoBehaviour
         yield return new WaitForSeconds(3);
 
         // start the game proper
-        ScoreScript.score = 0;
+        
         scrollSpeed = 2.5f;
         background.GetComponent<BackgroundScroll>().speed = 0.5f;
         hardcodedInstances.SetActive(true);
 
+        //resets score in case you killed that example guy
+        ScoreScript.score = 0;
+        //sets the number of criminals to get now that they're all active
+        ScoreScript.totalEnemies = GameObject.FindObjectsOfType(typeof(EnemyAI)).Length;
+
+        //used for testing the end screens
+        //ScoreScript.score = GameObject.FindObjectsOfType(typeof(EnemyAI)).Length;
     }
 
     IEnumerator CreateNotif(string msg, int time)

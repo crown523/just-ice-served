@@ -52,10 +52,8 @@ public class Snowball : MonoBehaviour
             Destroy(other.gameObject);
             Destroy(gameObject);
 
-            if (scene.Equals("EndlessMode"))
-            {
-                ScoreScript.score++;
-            }
+            ScoreScript.score++;
+            
             
         }
         else if(other.GetComponent<CopAI>() != null)
