@@ -23,14 +23,14 @@ public class StoryEndUI : MonoBehaviour
         
         //Check possible endings of Story Mode
         //Not all enemies apprehended
-        if(ScoreScript.score < ScoreScript.totalEnemies)
+        if(StoryScorebar.enemiesBeat < StoryScorebar.totalEnemies)
         {
-            endScore.GetComponent<Text>().text = "You managed to nab " + ScoreScript.score + " criminals." + 
+            endScore.GetComponent<Text>().text = "You managed to nab " + StoryScorebar.enemiesBeat + " criminals." + 
                                                   "\nYou may have missed some, but there's always next time.";
         }
         else
         {
-            if(!ScoreScript.bossBeat)
+            if(!StoryScorebar.bossBeat)
             {
                 endScore.GetComponent<Text>().text = "Looks like the boss got the best of you... \nBetter luck next time";
             }

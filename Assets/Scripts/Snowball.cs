@@ -53,6 +53,10 @@ public class Snowball : MonoBehaviour
             Destroy(gameObject);
 
             ScoreScript.score++;
+            // these 2
+            // should techincally be wrapped in if
+            // but wtv
+            StoryScorebar.enemiesBeat++;
             
             
         }

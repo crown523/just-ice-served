@@ -67,7 +67,7 @@ public class BossAI : MonoBehaviour
         //Once you beat the boss, transition to the end screen
         if(HP <= 0)
         {
-            ScoreScript.bossBeat = true;
+            StoryScorebar.bossBeat = true;
             SceneManager.LoadScene("StoryEndScreen");
         }
 
