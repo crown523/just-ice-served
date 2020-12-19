@@ -17,7 +17,7 @@ public class BossAI : MonoBehaviour
     public GameObject bossSnowball;
 
     public float followTiming = 0.5f;
-    public int HP;
+    public static int HP = 100;
 
     // Start is called before the first frame update
     void Start()

@@ -194,7 +194,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                HP -= 10;
+                SceneManager.LoadScene("StoryEndScreen");
             }
             
         }

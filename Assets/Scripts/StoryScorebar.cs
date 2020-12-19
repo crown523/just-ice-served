@@ -34,10 +34,15 @@ public class StoryScorebar : MonoBehaviour
                 scoreBar.value += 0.0043f; // creates gradual fill effect (although its pretty fast lmao)
             }
         }
+        else if (enemiesBeat == totalEnemies)
+        {
+            scoreBar.value = 1;
+            enemiesBeat++; // very hacky. i think it works just trust the process :)
+        }
         else
         {
             barLabel.text = "Boss HP";
-            if (scoreBar.value > (float) bossHP / 100)
+            if (scoreBar.value > (float) BossAI.HP / 100)
             {
                 scoreBar.value -= 0.0043f;
             }

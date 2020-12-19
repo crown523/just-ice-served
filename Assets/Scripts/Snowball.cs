@@ -72,7 +72,7 @@ public class Snowball : MonoBehaviour
         else if (other.GetComponent<BossAI>() != null)
         {
             Destroy(gameObject);
-            other.GetComponent<BossAI>().HP -= 10;
+            BossAI.HP -= 10;
         }
 
 

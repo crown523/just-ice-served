@@ -118,7 +118,7 @@ public class StoryGameController : MonoBehaviour
         StoryScorebar.totalEnemies = GameObject.FindObjectsOfType(typeof(EnemyAI)).Length;
 
         //used for testing the end screens
-        //ScoreScript.score = GameObject.FindObjectsOfType(typeof(EnemyAI)).Length;
+        StoryScorebar.enemiesBeat = 24;
     }
 
     IEnumerator CreateNotif(string msg, int time)
