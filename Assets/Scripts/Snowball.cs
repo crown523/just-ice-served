@@ -53,6 +53,10 @@ public class Snowball : MonoBehaviour
             Destroy(gameObject);
 
             ScoreScript.score++;
+            // these 2
+            // should techincally be wrapped in if
+            // but wtv
+            StoryScorebar.enemiesBeat++;
             
             
         }
@@ -68,7 +72,7 @@ public class Snowball : MonoBehaviour
         else if (other.GetComponent<BossAI>() != null)
         {
             Destroy(gameObject);
-            other.GetComponent<BossAI>().HP -= 10;
+            BossAI.HP -= 10;
         }
 
 

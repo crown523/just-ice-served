@@ -17,7 +17,7 @@ public class BossAI : MonoBehaviour
     public GameObject bossSnowball;
 
     public float followTiming = 0.5f;
-    public int HP;
+    public static int HP = 100;
 
     // Start is called before the first frame update
     void Start()
@@ -67,7 +67,7 @@ public class BossAI : MonoBehaviour
         //Once you beat the boss, transition to the end screen
         if(HP <= 0)
         {
-            ScoreScript.bossBeat = true;
+            StoryScorebar.bossBeat = true;
             SceneManager.LoadScene("StoryEndScreen");
         }
 

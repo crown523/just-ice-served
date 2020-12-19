@@ -33,8 +33,8 @@ public class StoryGameController : MonoBehaviour
         bossFight = false;
 
         //set the check for having beat the boss to false
-        ScoreScript.bossBeat = false;
-        ScoreScript.score = 0;
+        StoryScorebar.bossBeat = false;
+        StoryScorebar.enemiesBeat = 0;
 
         
 
@@ -55,7 +55,7 @@ public class StoryGameController : MonoBehaviour
         if(player.GetComponent<PlayerController>().finished && !bossFight)
         {
             bossFight = true;
-            if (ScoreScript.score >= ScoreScript.totalEnemies)
+            if (StoryScorebar.enemiesBeat >= StoryScorebar.totalEnemies)
             {
                 Destroy(GameObject.Find("FinishLine"));
                 
@@ -113,12 +113,12 @@ public class StoryGameController : MonoBehaviour
         hardcodedInstances.SetActive(true);
 
         //resets score in case you killed that example guy
-        ScoreScript.score = 0;
+        StoryScorebar.enemiesBeat = 0;
         //sets the number of criminals to get now that they're all active
-        ScoreScript.totalEnemies = GameObject.FindObjectsOfType(typeof(EnemyAI)).Length;
+        StoryScorebar.totalEnemies = GameObject.FindObjectsOfType(typeof(EnemyAI)).Length;
 
         //used for testing the end screens
-        //ScoreScript.score = GameObject.FindObjectsOfType(typeof(EnemyAI)).Length;
+        StoryScorebar.enemiesBeat = 24;
     }
 
     IEnumerator CreateNotif(string msg, int time)

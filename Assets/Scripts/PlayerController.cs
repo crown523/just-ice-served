@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     public GameObject snowball;
 
     //variables only used in story mode
-    public float HP;
+    public float HP; // should the player even have HP? i was thinking more bullet hell style tbh
     public bool finished = false;
 
     // Start is called before the first frame update
