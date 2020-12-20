@@ -61,7 +61,8 @@ public class StoryGameController : MonoBehaviour
                 
                 scrollSpeed = 0f;
                 background.GetComponent<BackgroundScroll>().speed = 0f;
-                Instantiate(boss, new Vector3(player.transform.position.x + 12, 0, 0), Quaternion.identity);
+                StartCoroutine(BossCutscene());
+                
             }
             else
             {
@@ -118,7 +119,22 @@ public class StoryGameController : MonoBehaviour
         StoryScorebar.totalEnemies = GameObject.FindObjectsOfType(typeof(EnemyAI)).Length;
 
         //used for testing the end screens
-        StoryScorebar.enemiesBeat = 24;
+        //StoryScorebar.enemiesBeat = 24;
+    }
+
+    IEnumerator BossCutscene()
+    {
+        Destroy(hardcodedInstances);
+
+        Instantiate(boss, new Vector3(player.transform.position.x + 25, 0, 0), Quaternion.identity);
+        yield return new WaitForSeconds(3);
+
+        StartCoroutine(CreateNotif("So you're the little punk running down the street and knocking out all my boys with snowballs", 3));
+        yield return new WaitForSeconds(3);
+
+        StartCoroutine(CreateNotif("Let's see how you like a taste of your own medicine!", 2));
+        yield return new WaitForSeconds(2);
+
     }
 
     IEnumerator CreateNotif(string msg, int time)

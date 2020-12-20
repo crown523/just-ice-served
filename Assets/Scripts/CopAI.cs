@@ -15,7 +15,13 @@ public class CopAI : MonoBehaviour
     private Vector3 direction;
     private GameObject player;
 
+    //taser related variables
+    //bottom 
     public GameObject taser;
+
+    //animation variables
+    public Animator anim;
+    public float timeTaserCreated;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +31,8 @@ public class CopAI : MonoBehaviour
         player = GameObject.Find("Player");
 
         cop = GetComponent<Transform>();
-        moving = false;
+        anim.SetBool("moving", false);
+        anim.SetBool("taser", false);
 
         //Added a scene check to make the cops simpler to hardcode for Story Mode
         if (scene.Equals("EndlessMode"))
@@ -37,17 +44,17 @@ public class CopAI : MonoBehaviour
 
             if (ylevel >= 3)
             {
-                cop.position = new Vector3(cop.position.x, 4.0f, 0.0f);
+                cop.position = new Vector3(cop.position.x, -0.5f, 0.0f);
                 lane = "top";
             }
             else if (ylevel >= -3)
             {
-                cop.position = new Vector3(cop.position.x, 0.0f, 0.0f);
+                cop.position = new Vector3(cop.position.x, -2.5f, 0.0f);
                 lane = "mid";
             }
             else
             {
-                cop.position = new Vector3(cop.position.x, -4.0f, 0.0f);
+                cop.position = new Vector3(cop.position.x, -4.5f, 0.0f);
                 lane = "bot";
             }
             // change lane (endless mode) every 2 seconds
@@ -58,15 +65,15 @@ public class CopAI : MonoBehaviour
             switch(lane)
             {
                 case "top":
-                    cop.position = new Vector3(cop.position.x, 4.0f, 0.0f);
+                    cop.position = new Vector3(cop.position.x, -0.5f, 0.0f);
                     direction = Vector3.down;
                     break;
                 case "mid":
-                    cop.position = new Vector3(cop.position.x, 0.0f, 0.0f);
+                    cop.position = new Vector3(cop.position.x, -2.5f, 0.0f);
                     direction = Vector3.down;
                     break;
                 case "bot":
-                    cop.position = new Vector3(cop.position.x, -4.0f, 0.0f);
+                    cop.position = new Vector3(cop.position.x, -4.5f, 0.0f);
                     direction = Vector3.up;
                     break;
             }
@@ -89,23 +96,38 @@ public class CopAI : MonoBehaviour
         switch(lane)
         {
             case "top":
-                if (Vector3.Distance(cop.position, new Vector3(cop.position.x, 4.0f, 0.0f)) > 0.05f)
+                if (Vector3.Distance(cop.position, new Vector3(cop.position.x, -0.5f, 0.0f)) > 0.05f)
                 {
-                    cop.position = Vector3.MoveTowards(cop.position, new Vector3(cop.position.x, 4.0f, 0.0f), 4.5f * Time.deltaTime);
+                    cop.position = Vector3.MoveTowards(cop.position, new Vector3(cop.position.x, -0.5f, 0.0f), 4.5f * Time.deltaTime);
+                    anim.SetBool("moving", true);
+                }
+                else
+                {
+                    anim.SetBool("moving", false);
                 }
                 break;
 
             case "mid":
-                if (Vector3.Distance(cop.position, new Vector3(cop.position.x, 0.0f, 0.0f)) > 0.05f)
+                if (Vector3.Distance(cop.position, new Vector3(cop.position.x, -2.5f, 0.0f)) > 0.05f)
                 {
-                    cop.position = Vector3.MoveTowards(cop.position, new Vector3(cop.position.x, 0.0f, 0.0f), 4.5f * Time.deltaTime);
+                    cop.position = Vector3.MoveTowards(cop.position, new Vector3(cop.position.x, -2.5f, 0.0f), 4.5f * Time.deltaTime);
+                    anim.SetBool("moving", true);
+                }
+                else
+                {
+                    anim.SetBool("moving", false);
                 }
                 break;
 
             case "bot":
-                if (Vector3.Distance(cop.position, new Vector3(cop.position.x, -4.0f, 0.0f)) > 0.05f)
+                if (Vector3.Distance(cop.position, new Vector3(cop.position.x, -4.5f, 0.0f)) > 0.05f)
                 {
-                    cop.position = Vector3.MoveTowards(cop.position, new Vector3(cop.position.x, -4.0f, 0.0f), 4.5f * Time.deltaTime);
+                    cop.position = Vector3.MoveTowards(cop.position, new Vector3(cop.position.x, -4.5f, 0.0f), 4.5f * Time.deltaTime);
+                    anim.SetBool("moving", true);
+                }
+                else
+                {
+                    anim.SetBool("moving", false);
                 }
                 break;
         }
@@ -113,6 +135,12 @@ public class CopAI : MonoBehaviour
         // destroy when player passes the cop
         if (cop.position.x < player.transform.position.x - 2.5) {
             Destroy(gameObject);
+        }
+
+        //leave taser animation
+        if(Time.time-timeTaserCreated >= 2f)
+        {
+            anim.SetBool("taser", false);
         }
     }
 
@@ -181,7 +209,11 @@ public class CopAI : MonoBehaviour
 
         // creates taser at the "front" of the cop
         // attached to cop as parent, so moves with it
-        Instantiate(taser, new Vector3(cop.position.x - 1, cop.position.y, cop.position.z), cop.rotation, cop);
+        Instantiate(taser, new Vector3(cop.position.x - 1.25f, cop.position.y + 0.24f, cop.position.z), cop.rotation, cop);
+
+        timeTaserCreated = Time.time;
+        anim.SetBool("taser", true);
+
     }
 
 }
