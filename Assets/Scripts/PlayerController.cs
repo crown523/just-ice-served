@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     public GameObject snowball;
 
     //variables only used in story mode
-    public float HP; // should the player even have HP? i was thinking more bullet hell style tbh
+    public int HP = 30; // should the player even have HP? i was thinking more bullet hell style tbh
     public bool finished = false;
 
 

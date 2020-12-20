@@ -17,7 +17,7 @@ public class BossAI : MonoBehaviour
     public GameObject bossSnowball;
 
     public float followTiming = 1f;
-    public static int HP = 100;
+    public static int HP = 150;
 
     //animation related code
     public Animator anim;    
@@ -134,6 +134,6 @@ public class BossAI : MonoBehaviour
         InvokeRepeating("FollowPlayer", followTiming, followTiming);
 
         // Throw a snowball every so often
-        InvokeRepeating("ThrowSnowball", 1, 2);
+        InvokeRepeating("ThrowSnowball", 1, 1);
     }
 }
