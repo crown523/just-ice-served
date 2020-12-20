@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private string scene;
 
     //variables for movement
+    public bool controlsActive;
     private string lane;
     private bool moving;
     private Transform player;
@@ -27,13 +28,20 @@ public class PlayerController : MonoBehaviour
     public float HP; // should the player even have HP? i was thinking more bullet hell style tbh
     public bool finished = false;
 
+
+    //animator variables
+    public Animator anim;
+    public GameObject controller;
+
     // Start is called before the first frame update
     void Start()
     {
         scene = SceneManager.GetActiveScene().name;
 
+        controlsActive = true;
+
         player = GetComponent<Transform>();
-        player.position = new Vector3(-5.0f, 0, 0.0f);
+        player.position = new Vector3(-5.0f, -2.5f, 0.0f);
         
         lane = "mid";
 
@@ -45,20 +53,31 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if(scene.Equals("EndlessMode"))
+        {
+            anim.SetFloat("scale", controller.GetComponent<EndlessGameController>().scale);
+        }
+        else
+        {
+            anim.SetFloat("scale", controller.GetComponent<StoryGameController>().scrollSpeed);
+        }
         
         if (!EndlessGameController.isTransitioning) {
             // prevent movement during transition phase, could fix bug 
-            if (Input.GetKeyDown("space") && !moving) 
+            if (Input.GetKeyDown("space") && !moving && controlsActive) 
             {
-
+                
                 moving = true;
-
+                
+                anim.SetBool("moving", true);
             }
         }
         
         //throw a snowball
-        if(Input.GetKeyDown("z") && Time.time > nextThrow)
+        if(Input.GetKeyDown("z") && Time.time > nextThrow && controlsActive)
         {
+            anim.Play("player-throw");
             nextThrow = Time.time + throwDelay;
             Instantiate(snowball, throwLocation.position, throwLocation.rotation);
         }
@@ -71,7 +90,7 @@ public class PlayerController : MonoBehaviour
                 case "top":
 
                     direction = Vector3.down;
-                    if (Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) > 0.075f)
+                    if (Vector3.Distance(player.position, new Vector3(player.position.x, -2.5f, 0.0f)) > 0.075f)
                     {
                         player.Translate(switchSpeed * direction * Time.deltaTime);
                     }
@@ -79,17 +98,18 @@ public class PlayerController : MonoBehaviour
                     {
                         moving = false;
                         lane = "mid";
+                        anim.SetBool("moving", false);
                     }
 
                     break;
 
                 case "mid":
 
-                    if ((direction == Vector3.up) && Vector3.Distance(player.position, new Vector3(player.position.x, 4.0f, 0.0f)) > 0.075f)
+                    if ((direction == Vector3.up) && Vector3.Distance(player.position, new Vector3(player.position.x, -0.5f, 0.0f)) > 0.075f)
                     {
                         player.Translate(switchSpeed * direction * Time.deltaTime);
                     }
-                    else if ((direction == Vector3.down) && Vector3.Distance(player.position, new Vector3(player.position.x, -4.0f, 0.0f)) > 0.075f)
+                    else if ((direction == Vector3.down) && Vector3.Distance(player.position, new Vector3(player.position.x, -4.5f, 0.0f)) > 0.075f)
                     {
                         player.Translate(switchSpeed * direction * Time.deltaTime);
                     }
@@ -105,6 +125,7 @@ public class PlayerController : MonoBehaviour
                         {
                             lane = "top";
                         }
+                        anim.SetBool("moving", false);
 
                     }
 
@@ -113,7 +134,7 @@ public class PlayerController : MonoBehaviour
                 case "bot":
 
                     direction = Vector3.up;
-                    if (Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) > 0.075f)
+                    if (Vector3.Distance(player.position, new Vector3(player.position.x, -2.5f, 0.0f)) > 0.075f)
                     {
                         player.Translate(switchSpeed * direction * Time.deltaTime);
                     }
@@ -122,13 +143,14 @@ public class PlayerController : MonoBehaviour
 
                         moving = false;
                         lane = "mid";
+                        anim.SetBool("moving", false);
                     }
 
                     break;
 
             }
 
-            print(lane);
+            //print(lane);
         }
 
         //if your hp drops to 0 during the bossfight
@@ -146,19 +168,21 @@ public class PlayerController : MonoBehaviour
             switch (lane)
             {
                 case "top":
-                    if (Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) < 0.075f)
+                    if (Vector3.Distance(player.position, new Vector3(player.position.x, -2.5f, 0.0f)) < 0.075f)
                     {
                         moving = false;
                         lane = "mid";
+                        anim.SetBool("moving", false);
                     }
                     break;
 
                 case "mid":
 
-                    if ((direction == Vector3.up) && Vector3.Distance(player.position, new Vector3(player.position.x, 4.0f, 0.0f)) < 0.075f
-                    || ((direction == Vector3.down) && Vector3.Distance(player.position, new Vector3(player.position.x, -4.0f, 0.0f)) < 0.075f))
+                    if ((direction == Vector3.up) && Vector3.Distance(player.position, new Vector3(player.position.x, -0.5f, 0.0f)) < 0.075f
+                    || ((direction == Vector3.down) && Vector3.Distance(player.position, new Vector3(player.position.x, -4.5f, 0.0f)) < 0.075f))
                     {
                         moving = false;
+                        anim.SetBool("moving", false);
                         if (direction == Vector3.down)
                         {
                             lane = "bot";
@@ -171,9 +195,10 @@ public class PlayerController : MonoBehaviour
                     break;
 
                 case "bot":
-                    if (Vector3.Distance(player.position, new Vector3(player.position.x, 0.0f, 0.0f)) < 0.075f)
+                    if (Vector3.Distance(player.position, new Vector3(player.position.x, -2.5f, 0.0f)) < 0.075f)
                     {
                         moving = false;
+                        anim.SetBool("moving", false);
                         lane = "mid";
                     }
                     break;
@@ -200,7 +225,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(other.name.Equals("FinishLine"))
         {
-            print("done");
+            //print("done");
             finished = true;
         }
         

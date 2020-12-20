@@ -61,7 +61,8 @@ public class StoryGameController : MonoBehaviour
                 
                 scrollSpeed = 0f;
                 background.GetComponent<BackgroundScroll>().speed = 0f;
-                Instantiate(boss, new Vector3(player.transform.position.x + 12, 0, 0), Quaternion.identity);
+                StartCoroutine(BossCutscene());
+                
             }
             else
             {
@@ -75,7 +76,7 @@ public class StoryGameController : MonoBehaviour
     // instructions "cutscene" at start of game
     IEnumerator GameStartCutscene()
     {
-        
+        /*
         StartCoroutine(CreateNotif("Welcome to story mode.", 3));
         yield return new WaitForSeconds(3);
 
@@ -87,12 +88,12 @@ public class StoryGameController : MonoBehaviour
 
 
         StartCoroutine(CreateNotif("This is a criminal. Press 'z' to throw a snowball and hit criminals to knock them out.", 3));
-        Instantiate(tutorialEnemy, new Vector3(player.transform.position.x + 8, 0, 0), Quaternion.identity);
+        Instantiate(tutorialEnemy, new Vector3(player.transform.position.x + 8, -2.5f, 0), Quaternion.identity);
         yield return new WaitForSeconds(3);
 
         //a hacky way to destroy the specific instantiated example gameobjects
         Destroy(GameObject.Find("Enemy(Clone)"));
-        Instantiate(tutorialCop, new Vector3(player.transform.position.x + 11, 0, 0), Quaternion.identity);
+        Instantiate(tutorialCop, new Vector3(player.transform.position.x + 11, -2.5f, 0), Quaternion.identity);
         StartCoroutine(CreateNotif("This is a cop. Cops will change lanes and occasionally shoot out tasers.", 3));
         yield return new WaitForSeconds(3);
 
@@ -103,13 +104,13 @@ public class StoryGameController : MonoBehaviour
         Destroy(GameObject.Find("Cop(Clone)"));
         StartCoroutine(CreateNotif("Try and apprehend all criminals whle avoiding the cops. " +
                                     "\nAvenging your sibling's fallen snowman is in your hands", 3));
-        
+        */
         yield return new WaitForSeconds(3);
 
         // start the game proper
         
         scrollSpeed = 2.5f;
-        background.GetComponent<BackgroundScroll>().speed = 0.5f;
+        background.GetComponent<BackgroundScroll>().speed = 0.25f;
         hardcodedInstances.SetActive(true);
 
         //resets score in case you killed that example guy
@@ -118,7 +119,24 @@ public class StoryGameController : MonoBehaviour
         StoryScorebar.totalEnemies = GameObject.FindObjectsOfType(typeof(EnemyAI)).Length;
 
         //used for testing the end screens
-        StoryScorebar.enemiesBeat = 24;
+        //StoryScorebar.enemiesBeat = 24;
+    }
+
+    IEnumerator BossCutscene()
+    {
+        Destroy(hardcodedInstances);
+        player.GetComponent<PlayerController>().controlsActive = false;
+        Instantiate(boss, new Vector3(player.transform.position.x + 24, 0, 0), Quaternion.identity);
+        yield return new WaitForSeconds(3);
+
+        StartCoroutine(CreateNotif("So you're the little punk running down the street and knocking out all my boys with snowballs", 3));
+        yield return new WaitForSeconds(3);
+
+        StartCoroutine(CreateNotif("Let's see how you like a taste of your own medicine!", 2));
+        yield return new WaitForSeconds(2);
+
+        player.GetComponent<PlayerController>().controlsActive = true;
+
     }
 
     IEnumerator CreateNotif(string msg, int time)
