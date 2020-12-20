@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: lowprio
+    uniqueID: 2681757349
+    locked: 0
+  - name: highprio
+    uniqueID: 3575327773
+    locked: 0

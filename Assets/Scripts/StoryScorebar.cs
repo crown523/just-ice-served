@@ -18,7 +18,7 @@ public class StoryScorebar : MonoBehaviour
     void Start()
     {
         scoreBar = GetComponent<Slider>();
-        barLabel = GetComponent<Transform>().GetChild(0).GetComponent<Text>();
+        barLabel = GetComponent<Transform>().GetChild(0).GetChild(0).GetComponent<Text>();
     }
 
     // Update is called once per frame

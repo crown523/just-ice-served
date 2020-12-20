@@ -10,7 +10,6 @@ public class CopAI : MonoBehaviour
 
     //variables for movement
     public string lane;
-    private bool moving;
     private Transform cop;
     private Vector3 direction;
     private GameObject player;
@@ -153,7 +152,7 @@ public class CopAI : MonoBehaviour
 
         // dont change lane if already moving
         // AND dont change lane if too close to the player (could be undodgeable)
-        if (!moving && !tooClose) {
+        if (!tooClose) {
             //print("SWITCHING LANE");
             switch (Random.Range(1, 4))
             {

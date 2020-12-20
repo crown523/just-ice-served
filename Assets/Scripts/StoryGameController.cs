@@ -13,7 +13,10 @@ public class StoryGameController : MonoBehaviour
     public GameObject player;
 
     // ui refs
-    private Text notifText;
+    public Text notifText;
+    public GameObject box;
+    public AudioSource stageMusicPlayer;
+    public AudioSource bossMusicPlayer;
 
     //Objects to activate/change at certain points in the mode
     public GameObject tutorialEnemy;
@@ -22,8 +25,6 @@ public class StoryGameController : MonoBehaviour
     public GameObject boss;
     public GameObject background;
     private bool bossFight;
-    public AudioSource stageMusicPlayer;
-    public AudioSource bossMusicPlayer;
 
     // Start is called before the first frame update
     void Start()
@@ -39,8 +40,6 @@ public class StoryGameController : MonoBehaviour
         StoryScorebar.enemiesBeat = 0;
 
         
-
-        notifText = GameObject.Find("notifText").GetComponent<Text>();
 
         hardcodedInstances.SetActive(false);
 
@@ -86,6 +85,7 @@ public class StoryGameController : MonoBehaviour
             }
             else
             {
+                StoryEndUI.diedToCop = false;
                 SceneManager.LoadScene("StoryEndScreen");
             }
             
@@ -96,25 +96,27 @@ public class StoryGameController : MonoBehaviour
     // instructions "cutscene" at start of game
     IEnumerator GameStartCutscene()
     {
-        
-        StartCoroutine(CreateNotif("Welcome to story mode.", 3));
+        box.SetActive(true);
+
+        StartCoroutine(CreateNotif("Your story begins here.", 3));
         yield return new WaitForSeconds(3);
 
-        StartCoroutine(CreateNotif("After a thug knocked over your little sibling's snowman, you've taken it upon yourself to hunt down every criminal in the vicinity of your neighborhood.", 3));
-        yield return new WaitForSeconds(3);
+        StartCoroutine(CreateNotif("After an organized crime syndicate obliterated your little sibling's snowman, you've taken it upon yourself to hunt down every criminal in your neighborhood.", 5));
+        yield return new WaitForSeconds(5);
 
         StartCoroutine(CreateNotif("Press space to move to an adjacent lane. You'll start off moving down, and change directions when in the top or bottom lane.", 5));
         yield return new WaitForSeconds(5);
 
 
-        StartCoroutine(CreateNotif("This is a criminal. Press 'z' to throw a snowball and hit criminals to knock them out.", 3));
+        StartCoroutine(CreateNotif("This is snowman-terrorizing mafioso. Press 'z' to throw a snowball and hit mafiosos to knock them out.", 4));
         Instantiate(tutorialEnemy, new Vector3(player.transform.position.x + 8, -2.5f, 0), Quaternion.identity);
         yield return new WaitForSeconds(3);
-
         //a hacky way to destroy the specific instantiated example gameobjects
         Destroy(GameObject.Find("Enemy(Clone)"));
+        yield return new WaitForSeconds(1);
+        
         Instantiate(tutorialCop, new Vector3(player.transform.position.x + 11, -2.5f, 0), Quaternion.identity);
-        StartCoroutine(CreateNotif("This is a cop. Cops will change lanes and occasionally shoot out tasers.", 3));
+        StartCoroutine(CreateNotif("This is a (cough corrupt cough) cop. Cops will change lanes and occasionally shoot out tasers.", 3));
         yield return new WaitForSeconds(3);
 
 
@@ -122,14 +124,15 @@ public class StoryGameController : MonoBehaviour
         yield return new WaitForSeconds(3);
 
         Destroy(GameObject.Find("Cop(Clone)"));
-        StartCoroutine(CreateNotif("Try and apprehend all criminals whle avoiding the cops. " +
-                                    "\nAvenging your sibling's fallen snowman is in your hands", 3));
+        StartCoroutine(CreateNotif("Clear the streets of all mafiosos while avoiding law enforcement. " +
+                                    "\nThe fate of all snowmanity hangs in the balance. Good luck.", 5));
         
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(5);
 
         // start the game proper
         
-        
+        box.SetActive(false);
+
         scrollSpeed = 2.5f;
         background.GetComponent<BackgroundScroll>().speed = 0.25f;
         hardcodedInstances.SetActive(true);

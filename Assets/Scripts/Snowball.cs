@@ -34,7 +34,7 @@ public class Snowball : MonoBehaviour
 
     void Update()
     {
-        if (Time.time - createdTime >= 4) {
+        if (Time.time - createdTime >= 3) {
             Destroy(gameObject);
         }
     }
