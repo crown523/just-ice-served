@@ -149,11 +149,13 @@ public class StoryGameController : MonoBehaviour
 
     IEnumerator BossCutscene()
     {
+        
         Destroy(hardcodedInstances);
         player.GetComponent<PlayerController>().controlsActive = false;
         Instantiate(boss, new Vector3(player.transform.position.x + 24, 0, 0), Quaternion.identity);
         yield return new WaitForSeconds(3);
 
+        box.SetActive(true);
         StartCoroutine(CreateNotif("So you're the little punk running down the street and knocking out all my boys with snowballs.", 3));
         yield return new WaitForSeconds(3);
 
@@ -162,6 +164,7 @@ public class StoryGameController : MonoBehaviour
 
         player.GetComponent<PlayerController>().controlsActive = true;
         bossMusicPlayer.Play(0);
+        box.SetActive(false);
 
     }
 

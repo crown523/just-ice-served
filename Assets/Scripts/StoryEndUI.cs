@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class StoryEndUI : MonoBehaviour
 {
+    public Text titleText;
     public Text endScore;
     public GameObject panelOpt1;
     public GameObject panelOpt2;
@@ -44,6 +45,7 @@ public class StoryEndUI : MonoBehaviour
             }
             else
             {
+                titleText.GetComponent<Text>().text = "You Win!";
                 endScore.GetComponent<Text>().text = "You've avenged the demise of your sibling's snowman. The streets are clear of filth, and the snowmen of your neighborhood can breathe easy again. You are a hero.";
             }
             

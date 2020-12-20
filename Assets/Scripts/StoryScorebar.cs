@@ -42,7 +42,7 @@ public class StoryScorebar : MonoBehaviour
         else
         {
             barLabel.text = "Boss HP";
-            if (scoreBar.value > (float) BossAI.HP / 100)
+            if (scoreBar.value > (float) BossAI.HP / 150)
             {
                 scoreBar.value -= 0.0043f;
             }

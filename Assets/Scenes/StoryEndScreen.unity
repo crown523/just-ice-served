@@ -1184,7 +1184,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1922331309}
-  - component: {fileID: 1922331308}
   - component: {fileID: 1922331310}
   m_Layer: 0
   m_Name: DeathUIManager
@@ -1193,21 +1192,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1922331308
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1922331307}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64650cb7ea96a4eed956c1013bdd82f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  endScore: {fileID: 2033352099}
-  panelOpt1: {fileID: 873387428}
-  panelOpt2: {fileID: 1367482887}
 --- !u!4 &1922331309
 Transform:
   m_ObjectHideFlags: 0
@@ -1234,6 +1218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8bc39e3e2076e548a2e4e3a672413d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  titleText: {fileID: 763412445}
   endScore: {fileID: 2033352099}
   panelOpt1: {fileID: 873387428}
   panelOpt2: {fileID: 1367482887}

@@ -41,7 +41,7 @@ public class EndlessGameController : MonoBehaviour
     {
         CancelInvoke(); // clear any leftover invokes
         
-        //scale = 2f;
+        scale = 2f;
         ScoreScript.score = 0; // score needs to reset on restart
         if (!DeathUIManager.replayWasClicked) 
         {
@@ -80,32 +80,32 @@ public class EndlessGameController : MonoBehaviour
         if(ScoreScript.score >= 50 && !speed5)
         {
             speed5 = true;
-            scale *= 1.5f;
-            CauseSpeedTransition();
+            scale += 1.0f;
+            StartCoroutine(CauseSpeedTransition());
         }
         else if (ScoreScript.score >= 40 && !speed4)
         {
             speed4 = true;
-            scale *= 1.5f;
-            CauseSpeedTransition();
+            scale += 1.0f;
+            StartCoroutine(CauseSpeedTransition());
         }
         else if (ScoreScript.score >= 30 && !speed3)
         {
             speed3 = true;
-            scale *= 1.5f;
-            CauseSpeedTransition();
+            scale += 1.0f;
+            StartCoroutine(CauseSpeedTransition());
         }
         else if (ScoreScript.score >= 20 && !speed2)
         {
             speed2 = true;
-            scale *= 1.5f;
-            CauseSpeedTransition();
+            scale += 1.0f;
+            StartCoroutine(CauseSpeedTransition());
         }
         else if (ScoreScript.score >= 10 && !speed1)
         {
             speed1 = true;
-            scale *= 1.5f;
-            CauseSpeedTransition();
+            scale += 1.0f;
+            StartCoroutine(CauseSpeedTransition());
         }
 
         player.transform.Translate(scale * Vector3.right * Time.deltaTime);
@@ -171,7 +171,7 @@ public class EndlessGameController : MonoBehaviour
 
     // i want to add a "break" when the game speeds up, despawn all enemies, show a info message
     // so that the speed change isnt as abrupt
-    void CauseSpeedTransition() 
+    IEnumerator CauseSpeedTransition() 
     {
         isTransitioning = true;
         GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();
@@ -187,9 +187,12 @@ public class EndlessGameController : MonoBehaviour
         CancelInvoke();
         InvokeRepeating("SpawnCriminal", 5, 2);
         InvokeRepeating("SpawnCop", 7, 4);
+        box.SetActive(true);
         string msg = "You've reached " + ScoreScript.score + " points! Speeding up the game. Prepare yourself!";
         StartCoroutine(CreateNotif(msg, 4));
+        yield return new WaitForSeconds(4);
         background.GetComponent<BackgroundScroll>().speed = scale / 10;
+        box.SetActive(false);
         isTransitioning = false;
     }
 
