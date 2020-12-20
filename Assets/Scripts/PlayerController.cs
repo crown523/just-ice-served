@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
         controlsActive = true;
 
         player = GetComponent<Transform>();
-        player.position = new Vector3(-5.0f, -2f, 0.0f);
+        player.position = new Vector3(-5.0f, -2.5f, 0.0f);
         
         lane = "mid";
 
@@ -150,7 +150,7 @@ public class PlayerController : MonoBehaviour
 
             }
 
-            print(lane);
+            //print(lane);
         }
 
         //if your hp drops to 0 during the bossfight
@@ -225,7 +225,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(other.name.Equals("FinishLine"))
         {
-            print("done");
+            //print("done");
             finished = true;
         }
         

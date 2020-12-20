@@ -21,7 +21,7 @@ public class CopAI : MonoBehaviour
 
     //animation variables
     public Animator anim;
-    public float timeTaserCreated;
+    private float timeTaserCreated;
 
     // Start is called before the first frame update
     void Start()
@@ -57,8 +57,8 @@ public class CopAI : MonoBehaviour
                 cop.position = new Vector3(cop.position.x, -4.5f, 0.0f);
                 lane = "bot";
             }
-            // change lane (endless mode) every 2 seconds
-            InvokeRepeating("ChangeLaneEndless", 2, 2);
+            // change lane (endless mode) every 1.5 seconds
+            InvokeRepeating("ChangeLaneEndless", 2, 1.5f);
         }
         else
         {
@@ -79,7 +79,7 @@ public class CopAI : MonoBehaviour
             }
 
             // change lane (story mode) every 2 seconds
-            InvokeRepeating("ChangeLaneStory", 2, 2);
+            InvokeRepeating("ChangeLaneStory", 2, 1.5f);
 
         }
 

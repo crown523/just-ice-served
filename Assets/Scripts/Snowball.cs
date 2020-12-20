@@ -48,16 +48,21 @@ public class Snowball : MonoBehaviour
     {
         if(other.GetComponent<EnemyAI>() != null)
         {
-            //Destroy(other.GetComponent<Collider2D>().gameObject);
-            Destroy(other.gameObject);
             Destroy(gameObject);
 
-            ScoreScript.score++;
-            // these 2
-            // should techincally be wrapped in if
-            // but wtv
-            StoryScorebar.enemiesBeat++;
-            
+
+            if (scene.Equals("EndlessMode"))
+            {
+                ScoreScript.score++;
+            }
+            else
+            {
+                // these 2
+                // should techincally be wrapped in if
+                // but wtv
+                StoryScorebar.enemiesBeat++;
+            }
+
             
         }
         else if(other.GetComponent<CopAI>() != null)

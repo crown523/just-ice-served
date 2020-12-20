@@ -16,17 +16,20 @@ public class BossAI : MonoBehaviour
     public Transform throwLocation;
     public GameObject bossSnowball;
 
-    public float followTiming = 0.5f;
+    public float followTiming = 1f;
     public static int HP = 100;
 
     //animation related code
     public Animator anim;    
+    private bool cutsceneFin;
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player");
         boss = GetComponent<Transform>();
+
+        cutsceneFin = false;
 
         boss.position = new Vector3(boss.position.x, -2.5f, 0.0f);
         lane = "mid";
@@ -41,8 +44,13 @@ public class BossAI : MonoBehaviour
         // bring the boss on screen
         if(boss.position.x - player.transform.position.x > 12f)
         {
-            boss.position = Vector3.MoveTowards(new Vector3(player.transform.position.x + 12f, boss.position.y, 0.0f), boss.position, 5.5f * Time.deltaTime);
+            
+            boss.Translate(4.5f * Vector3.left * Time.deltaTime);
             anim.SetBool("moving", true);
+        }
+        else if(!cutsceneFin)
+        {
+            anim.SetBool("moving", false);
         }
         //bossfight time
         else
@@ -111,6 +119,7 @@ public class BossAI : MonoBehaviour
 
     void ThrowSnowball()
     {
+        anim.Play("boss-throw");
         Instantiate(bossSnowball, throwLocation.position, throwLocation.rotation);
     }
 
@@ -120,8 +129,8 @@ public class BossAI : MonoBehaviour
         yield return new WaitForSeconds(8);
 
         anim.SetBool("cutscene", false);
-
-        // change lane every 2 seconds
+        cutsceneFin = true;
+        // change lane in intervals
         InvokeRepeating("FollowPlayer", followTiming, followTiming);
 
         // Throw a snowball every so often

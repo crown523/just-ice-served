@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 170425331591694165}
   - component: {fileID: 170425331591694166}
   - component: {fileID: 893001694959836626}
-  m_Layer: 0
+  - component: {fileID: 1775882268878554233}
+  m_Layer: 9
   m_Name: Cop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +119,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.12530696, y: -0.008435667}
+  m_Offset: {x: 0.125, y: 0.25}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -129,7 +130,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.54982257, y: 1.2579406}
+  m_Size: {x: 0.5, y: 0.75}
   m_EdgeRadius: 0
 --- !u!114 &893001694959836626
 MonoBehaviour:
@@ -145,5 +146,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lane: 
   taser: {fileID: 2392995328398208061, guid: c3fd74bd8d258444bbb797e55e91b35b, type: 3}
-  anim: {fileID: 0}
-  timeTaserCreated: 0
+  anim: {fileID: 1775882268878554233}
+--- !u!95 &1775882268878554233
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170425331591694167}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e2e33ef2fbb29d1479de6b687c4225a7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
