@@ -22,6 +22,8 @@ public class StoryGameController : MonoBehaviour
     public GameObject boss;
     public GameObject background;
     private bool bossFight;
+    public AudioSource stageMusicPlayer;
+    public AudioSource bossMusicPlayer;
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +44,23 @@ public class StoryGameController : MonoBehaviour
 
         hardcodedInstances.SetActive(false);
 
-        StartCoroutine(GameStartCutscene());
+        if (!StoryEndUI.replayWasClicked) 
+        {
+            StartCoroutine(GameStartCutscene());
+        }
+        else
+        {
+            scrollSpeed = 2.5f;
+            background.GetComponent<BackgroundScroll>().speed = 0.25f;
+            hardcodedInstances.SetActive(true);
+            stageMusicPlayer.Play(0);
+
+            //resets score in case you killed that example guy
+            StoryScorebar.enemiesBeat = 0;
+            //sets the number of criminals to get now that they're all active
+            StoryScorebar.totalEnemies = GameObject.FindObjectsOfType(typeof(EnemyAI)).Length;
+        }
+        
     }
 
     // Update is called once per frame
@@ -54,9 +72,11 @@ public class StoryGameController : MonoBehaviour
 
         if(player.GetComponent<PlayerController>().finished && !bossFight)
         {
-            bossFight = true;
+            
             if (StoryScorebar.enemiesBeat >= StoryScorebar.totalEnemies)
             {
+                bossFight = true;
+                stageMusicPlayer.Stop();
                 Destroy(GameObject.Find("FinishLine"));
                 
                 scrollSpeed = 0f;
@@ -76,7 +96,7 @@ public class StoryGameController : MonoBehaviour
     // instructions "cutscene" at start of game
     IEnumerator GameStartCutscene()
     {
-        /*
+        
         StartCoroutine(CreateNotif("Welcome to story mode.", 3));
         yield return new WaitForSeconds(3);
 
@@ -104,14 +124,16 @@ public class StoryGameController : MonoBehaviour
         Destroy(GameObject.Find("Cop(Clone)"));
         StartCoroutine(CreateNotif("Try and apprehend all criminals whle avoiding the cops. " +
                                     "\nAvenging your sibling's fallen snowman is in your hands", 3));
-        */
+        
         yield return new WaitForSeconds(3);
 
         // start the game proper
         
+        
         scrollSpeed = 2.5f;
         background.GetComponent<BackgroundScroll>().speed = 0.25f;
         hardcodedInstances.SetActive(true);
+        stageMusicPlayer.Play(0);
 
         //resets score in case you killed that example guy
         StoryScorebar.enemiesBeat = 0;
@@ -129,13 +151,14 @@ public class StoryGameController : MonoBehaviour
         Instantiate(boss, new Vector3(player.transform.position.x + 24, 0, 0), Quaternion.identity);
         yield return new WaitForSeconds(3);
 
-        StartCoroutine(CreateNotif("So you're the little punk running down the street and knocking out all my boys with snowballs", 3));
+        StartCoroutine(CreateNotif("So you're the little punk running down the street and knocking out all my boys with snowballs.", 3));
         yield return new WaitForSeconds(3);
 
         StartCoroutine(CreateNotif("Let's see how you like a taste of your own medicine!", 2));
         yield return new WaitForSeconds(2);
 
         player.GetComponent<PlayerController>().controlsActive = true;
+        bossMusicPlayer.Play(0);
 
     }
 

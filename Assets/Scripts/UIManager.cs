@@ -31,10 +31,10 @@ public class UIManager : MonoBehaviour
             switch(selectedOpt)
             {
                 case 1:
-                    OnClickEndless();
+                    OnClickStory();
                     break;
                 case 2:
-                    OnClickStory();
+                    OnClickEndless();
                     break;
             }
         }

@@ -42,12 +42,12 @@ public class CopAI : MonoBehaviour
 
             float ylevel = cop.position.y;
 
-            if (ylevel >= 3)
+            if (ylevel >= -1.5)
             {
                 cop.position = new Vector3(cop.position.x, -0.5f, 0.0f);
                 lane = "top";
             }
-            else if (ylevel >= -3)
+            else if (ylevel >= -3.5)
             {
                 cop.position = new Vector3(cop.position.x, -2.5f, 0.0f);
                 lane = "mid";
