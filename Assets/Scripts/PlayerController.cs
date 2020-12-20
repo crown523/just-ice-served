@@ -219,6 +219,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
+                StoryEndUI.diedToCop = true;
                 SceneManager.LoadScene("StoryEndScreen");
             }
             

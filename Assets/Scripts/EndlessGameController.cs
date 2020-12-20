@@ -17,7 +17,7 @@ public class EndlessGameController : MonoBehaviour
     public float scale = 2.0f;
 
     //used for time-based scaling
-    public float speedLimit;
+    //public float speedLimit;
 
     //used for score-based scaling
     private bool speed1 = false;
@@ -28,7 +28,9 @@ public class EndlessGameController : MonoBehaviour
 
     // ui refs
     
-    private Text notifText;
+    public Text notifText;
+    public GameObject box;
+    public AudioSource audioPlayer;
 
     // other state vars
     
@@ -38,7 +40,6 @@ public class EndlessGameController : MonoBehaviour
     void Start()
     {
         CancelInvoke(); // clear any leftover invokes
-        notifText = GameObject.Find("notifText").GetComponent<Text>();
         
         //scale = 2f;
         ScoreScript.score = 0; // score needs to reset on restart
@@ -52,9 +53,10 @@ public class EndlessGameController : MonoBehaviour
             InvokeRepeating("SpawnCriminal", 2, 2);
             // spawn new cop every 4 seconds
             InvokeRepeating("SpawnCop", 4, 4);
+            audioPlayer.Play(0); // start the music
         }
         
-
+        background.GetComponent<BackgroundScroll>().speed = scale / 10;
         
     }
 
@@ -109,6 +111,7 @@ public class EndlessGameController : MonoBehaviour
         player.transform.Translate(scale * Vector3.right * Time.deltaTime);
         Camera.main.transform.Translate(scale * Vector3.right * Time.deltaTime);
         background.transform.Translate(scale * Vector3.right * Time.deltaTime);
+        
         // print(scale);
 
     }
@@ -117,12 +120,12 @@ public class EndlessGameController : MonoBehaviour
 
     void SpawnCriminal() 
     {
-       Instantiate(criminal, GenerateRandomPosition(12), Quaternion.identity);
+       Instantiate(criminal, GenerateRandomPosition(18), Quaternion.identity);
     }
 
     void SpawnCop() 
     {
-        Instantiate(cop, GenerateRandomPosition(14), Quaternion.identity);
+        Instantiate(cop, GenerateRandomPosition(20), Quaternion.identity);
     }
 
     Vector3 GenerateRandomPosition(int offset) 
@@ -130,24 +133,25 @@ public class EndlessGameController : MonoBehaviour
         // picks a random y coord (should be within the range that snowball can possibly reach) 
         // and spawns {offset} units away from the players current x
         // criminals spawn closer, cops spawn further away
-        return new Vector3(player.transform.position.x + offset, UnityEngine.Random.Range(-4.5f, 4.5f), 0);
+        return new Vector3(player.transform.position.x + offset, UnityEngine.Random.Range(-4.25f, 0.25f), 0);
     }
 
 
     // instructions "cutscene" at start of game
     IEnumerator GameStartCutscene()
     {
-
+        box.SetActive(true);
         StartCoroutine(CreateNotif("Welcome to endless mode.", 3));
         yield return new WaitForSeconds(3);
         StartCoroutine(CreateNotif("Press space to move to an adjacent lane. You'll start off moving down, and change directions when in the top or bottom lane.", 4));
-        yield return new WaitForSeconds(5);
-        Instantiate(criminal, new Vector3(player.transform.position.x + 12, 0, 0), Quaternion.identity);
+        yield return new WaitForSeconds(4);
+        Instantiate(criminal, new Vector3(player.transform.position.x + 12, -2.5f, 0), Quaternion.identity);
         StartCoroutine(CreateNotif("This is a criminal. Press 'z' to throw a snowball and hit criminals to gain points.", 3));
         yield return new WaitForSeconds(3);
-        Instantiate(cop, new Vector3(player.transform.position.x + 14, 0, 0), Quaternion.identity);
-        StartCoroutine(CreateNotif("This is a cop. Cops will change lanes and occasionally shoot out tasers.", 3));
-        yield return new WaitForSeconds(3);
+        Instantiate(cop, new Vector3(player.transform.position.x + 14, -2.5f, 0), Quaternion.identity);
+        StartCoroutine(CreateNotif("This is a cop. Cops will change lanes and occasionally shoot out tasers.", 4));
+        yield return new WaitForSeconds(4);
+        Destroy(GameObject.Find("Cop(Clone)"));
         StartCoroutine(CreateNotif("Hitting a cop with a snowball loses you points, and running into a cop or their taser ends the game.", 3));
         yield return new WaitForSeconds(3);
         StartCoroutine(CreateNotif("Good luck! Aim for as high a score as you can!", 3));
@@ -156,11 +160,13 @@ public class EndlessGameController : MonoBehaviour
 
         yield return new WaitForSeconds(3);
 
+        box.SetActive(false);
         // spawn new criminals once every 2 seconds
         InvokeRepeating("SpawnCriminal", 2, 2);
         // spawn new cop every 4 seconds
         InvokeRepeating("SpawnCop", 4, 4);
         ScoreScript.score = 0;
+        audioPlayer.Play(0); // start the music
     }
 
     // i want to add a "break" when the game speeds up, despawn all enemies, show a info message
@@ -171,7 +177,7 @@ public class EndlessGameController : MonoBehaviour
         GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();
         foreach (GameObject gameObj in allGameObjects) {
             print(gameObj);
-            // destory all criminals and cops on screen
+            // destroy all criminals and cops on screen
             if (gameObj.GetComponent<EnemyAI>() || gameObj.GetComponent<CopAI>()) {
                 Destroy(gameObj);
             }
@@ -183,6 +189,7 @@ public class EndlessGameController : MonoBehaviour
         InvokeRepeating("SpawnCop", 7, 4);
         string msg = "You've reached " + ScoreScript.score + " points! Speeding up the game. Prepare yourself!";
         StartCoroutine(CreateNotif(msg, 4));
+        background.GetComponent<BackgroundScroll>().speed = scale / 10;
         isTransitioning = false;
     }
 

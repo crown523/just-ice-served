@@ -13,7 +13,10 @@ public class StoryGameController : MonoBehaviour
     public GameObject player;
 
     // ui refs
-    private Text notifText;
+    public Text notifText;
+    public GameObject box;
+    public AudioSource stageMusicPlayer;
+    public AudioSource bossMusicPlayer;
 
     //Objects to activate/change at certain points in the mode
     public GameObject tutorialEnemy;
@@ -38,11 +41,25 @@ public class StoryGameController : MonoBehaviour
 
         
 
-        notifText = GameObject.Find("notifText").GetComponent<Text>();
-
         hardcodedInstances.SetActive(false);
 
-        StartCoroutine(GameStartCutscene());
+        if (!StoryEndUI.replayWasClicked) 
+        {
+            StartCoroutine(GameStartCutscene());
+        }
+        else
+        {
+            scrollSpeed = 2.5f;
+            background.GetComponent<BackgroundScroll>().speed = 0.25f;
+            hardcodedInstances.SetActive(true);
+            stageMusicPlayer.Play(0);
+
+            //resets score in case you killed that example guy
+            StoryScorebar.enemiesBeat = 0;
+            //sets the number of criminals to get now that they're all active
+            StoryScorebar.totalEnemies = GameObject.FindObjectsOfType(typeof(EnemyAI)).Length;
+        }
+        
     }
 
     // Update is called once per frame
@@ -54,9 +71,11 @@ public class StoryGameController : MonoBehaviour
 
         if(player.GetComponent<PlayerController>().finished && !bossFight)
         {
-            bossFight = true;
+            
             if (StoryScorebar.enemiesBeat >= StoryScorebar.totalEnemies)
             {
+                bossFight = true;
+                stageMusicPlayer.Stop();
                 Destroy(GameObject.Find("FinishLine"));
                 
                 scrollSpeed = 0f;
@@ -66,6 +85,7 @@ public class StoryGameController : MonoBehaviour
             }
             else
             {
+                StoryEndUI.diedToCop = false;
                 SceneManager.LoadScene("StoryEndScreen");
             }
             
@@ -76,25 +96,27 @@ public class StoryGameController : MonoBehaviour
     // instructions "cutscene" at start of game
     IEnumerator GameStartCutscene()
     {
-        /*
-        StartCoroutine(CreateNotif("Welcome to story mode.", 3));
+        box.SetActive(true);
+
+        StartCoroutine(CreateNotif("Your story begins here.", 3));
         yield return new WaitForSeconds(3);
 
-        StartCoroutine(CreateNotif("After a thug knocked over your little sibling's snowman, you've taken it upon yourself to hunt down every criminal in the vicinity of your neighborhood.", 3));
-        yield return new WaitForSeconds(3);
+        StartCoroutine(CreateNotif("After an organized crime syndicate obliterated your little sibling's snowman, you've taken it upon yourself to hunt down every criminal in your neighborhood.", 5));
+        yield return new WaitForSeconds(5);
 
         StartCoroutine(CreateNotif("Press space to move to an adjacent lane. You'll start off moving down, and change directions when in the top or bottom lane.", 5));
         yield return new WaitForSeconds(5);
 
 
-        StartCoroutine(CreateNotif("This is a criminal. Press 'z' to throw a snowball and hit criminals to knock them out.", 3));
+        StartCoroutine(CreateNotif("This is snowman-terrorizing mafioso. Press 'z' to throw a snowball and hit mafiosos to knock them out.", 4));
         Instantiate(tutorialEnemy, new Vector3(player.transform.position.x + 8, -2.5f, 0), Quaternion.identity);
         yield return new WaitForSeconds(3);
-
         //a hacky way to destroy the specific instantiated example gameobjects
         Destroy(GameObject.Find("Enemy(Clone)"));
+        yield return new WaitForSeconds(1);
+        
         Instantiate(tutorialCop, new Vector3(player.transform.position.x + 11, -2.5f, 0), Quaternion.identity);
-        StartCoroutine(CreateNotif("This is a cop. Cops will change lanes and occasionally shoot out tasers.", 3));
+        StartCoroutine(CreateNotif("This is a (cough corrupt cough) cop. Cops will change lanes and occasionally shoot out tasers.", 3));
         yield return new WaitForSeconds(3);
 
 
@@ -102,16 +124,19 @@ public class StoryGameController : MonoBehaviour
         yield return new WaitForSeconds(3);
 
         Destroy(GameObject.Find("Cop(Clone)"));
-        StartCoroutine(CreateNotif("Try and apprehend all criminals whle avoiding the cops. " +
-                                    "\nAvenging your sibling's fallen snowman is in your hands", 3));
-        */
-        yield return new WaitForSeconds(3);
+        StartCoroutine(CreateNotif("Clear the streets of all mafiosos while avoiding law enforcement. " +
+                                    "\nThe fate of all snowmanity hangs in the balance. Good luck.", 5));
+        
+        yield return new WaitForSeconds(5);
 
         // start the game proper
         
+        box.SetActive(false);
+
         scrollSpeed = 2.5f;
         background.GetComponent<BackgroundScroll>().speed = 0.25f;
         hardcodedInstances.SetActive(true);
+        stageMusicPlayer.Play(0);
 
         //resets score in case you killed that example guy
         StoryScorebar.enemiesBeat = 0;
@@ -129,13 +154,14 @@ public class StoryGameController : MonoBehaviour
         Instantiate(boss, new Vector3(player.transform.position.x + 24, 0, 0), Quaternion.identity);
         yield return new WaitForSeconds(3);
 
-        StartCoroutine(CreateNotif("So you're the little punk running down the street and knocking out all my boys with snowballs", 3));
+        StartCoroutine(CreateNotif("So you're the little punk running down the street and knocking out all my boys with snowballs.", 3));
         yield return new WaitForSeconds(3);
 
         StartCoroutine(CreateNotif("Let's see how you like a taste of your own medicine!", 2));
         yield return new WaitForSeconds(2);
 
         player.GetComponent<PlayerController>().controlsActive = true;
+        bossMusicPlayer.Play(0);
 
     }
 

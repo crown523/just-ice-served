@@ -15,6 +15,7 @@ public class StoryEndUI : MonoBehaviour
     // used to skip tutorial cutscene
     // set true when playtesting
     public static bool replayWasClicked = false;
+    public static bool diedToCop = false;
 
     // Start is called before the first frame update
     void Start()
@@ -25,18 +26,25 @@ public class StoryEndUI : MonoBehaviour
         //Not all enemies apprehended
         if(StoryScorebar.enemiesBeat < StoryScorebar.totalEnemies)
         {
-            endScore.GetComponent<Text>().text = "You managed to nab " + StoryScorebar.enemiesBeat + " criminals." + 
-                                                  "\nYou may have missed some, but there's always next time.";
+            if (diedToCop)
+            {
+                endScore.GetComponent<Text>().text = "The (cough corrupt cough) cops put an end to your mission. Make sure to avoid them next time.";
+            }
+            else
+            {
+                endScore.GetComponent<Text>().text = "You let some criminals walk free. Make sure all of them face justice for their crimes against snowmanity.";
+            }
+            
         }
         else
         {
             if(!StoryScorebar.bossBeat)
             {
-                endScore.GetComponent<Text>().text = "Looks like the boss got the best of you... \nBetter luck next time";
+                endScore.GetComponent<Text>().text = "The don walks free. Snowmen everywhere tremble in fear. Better luck next time.";
             }
             else
             {
-                endScore.GetComponent<Text>().text = "You managed to defeat the boss.";
+                endScore.GetComponent<Text>().text = "You've avenged the demise of your sibling's snowman. The streets are clear of filth, and the snowmen of your neighborhood can breathe easy again. You are a hero.";
             }
             
         }
